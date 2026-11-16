@@ -1,0 +1,4403 @@
+{
+ "version": 1,
+ "generated": "2026-11-16",
+ "datasets": {
+  "film": {
+   "title": "NYC film permits",
+   "files": [
+    "NYC_Film_Permits.txt"
+   ],
+   "subject": "Excel"
+  },
+  "etl1": {
+   "title": "Messy balance sheet (ETL case 1)",
+   "files": [
+    "Analytics_mindset_case_studies_ETL_Case1.csv"
+   ],
+   "subject": "Excel"
+  },
+  "etl2": {
+   "title": "Employee codes (ETL case 2)",
+   "files": [
+    "Analytics_mindset_case_studies_ETL_Case2_Excel.xlsx"
+   ],
+   "subject": "Excel"
+  },
+  "etl3": {
+   "title": "Messy employee codes (ETL case 3)",
+   "files": [
+    "Analytics_mindset_case_studies_ETL_Case3_Excel.xlsx"
+   ],
+   "subject": "Excel"
+  },
+  "etl4": {
+   "title": "Journal entries (ETL case 4)",
+   "files": [
+    "Analytics_mindset_case_studies_ETL_Case4_Excel.xlsx"
+   ],
+   "subject": "Excel"
+  },
+  "payroll": {
+   "title": "IntegrateCo payroll",
+   "files": [
+    "Analytics_mindset_case_studies_IntegrateCo_2015payroll.csv",
+    "Analytics_mindset_case_studies_IntegrateCo_2016payroll.csv",
+    "Analytics_mindset_case_studies_IntegrateCo_jobcodes.csv",
+    "Analytics_mindset_case_studies_IntegrateCo_locations.csv"
+   ],
+   "subject": "Excel"
+  },
+  "chinook": {
+   "title": "Chinook music store",
+   "files": [
+    "Chinook_Sqlite.sqlite"
+   ],
+   "subject": "SQL",
+   "browser_sql": true
+  },
+  "songs": {
+   "title": "CS50 songs",
+   "files": [
+    "songs.db"
+   ],
+   "subject": "SQL",
+   "browser_sql": true
+  },
+  "fiftyville": {
+   "title": "Fiftyville mystery",
+   "files": [
+    "fiftyville.db"
+   ],
+   "subject": "SQL",
+   "browser_sql": true
+  },
+  "movies": {
+   "title": "CS50 movies",
+   "files": [],
+   "release_files": [
+    "movies.db.zip"
+   ],
+   "subject": "SQL",
+   "browser_sql": false,
+   "size_note": "69 MB unzipped — too large to run in the browser. Unzip, open in DB Browser for SQLite and enter your result. (It is also in your SQL Part 1 course folder.)"
+  },
+  "pcards": {
+   "title": "OSU purchasing cards",
+   "files": [
+    "pcards.db.zip"
+   ],
+   "subject": "SQL",
+   "browser_sql": false,
+   "size_note": "94 MB unzipped — too large to run in the browser. Unzip, open in DB Browser for SQLite and enter your result."
+  }
+ },
+ "questions": [
+  {
+   "id": "FP01",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "How many records does the table have?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 33502,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "=ROWS(Table1) or the count in the status bar minus the header row"
+   },
+   "traps": [
+    {
+     "value": 33503,
+     "message": "You counted the header row as a record."
+    }
+   ]
+  },
+  {
+   "id": "FP02",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "How many columns does the table have?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 14,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "=COLUMNS(Table1)"
+   },
+   "traps": []
+  },
+  {
+   "id": "FP03",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "How many records have a missing value for ZipCode?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 11,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "=COUNTBLANK(Table1[ZipCode])"
+   },
+   "traps": [
+    {
+     "value": 13,
+     "message": "You mixed blank zip codes with invalid ones. Missing = blank; invalid is the next question."
+    }
+   ]
+  },
+  {
+   "id": "FP04",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "How many records have an invalid value for ZipCode (not a 5-digit code)?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 2,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Filter ZipCode, or =COUNTIFS(Table1[ZipCode],\"<10000\") + COUNTIFS(Table1[ZipCode],\">99999\"). The invalid value is 83."
+   },
+   "traps": [
+    {
+     "value": 13,
+     "message": "You included the blank zip codes. Blanks are 'missing', not 'invalid'."
+    }
+   ]
+  },
+  {
+   "id": "FP05",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "Which column has the same value for every record? (exact column name)",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "EventAgency",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Filter each column or use =COUNTA(UNIQUE(column)) = 1."
+   },
+   "traps": []
+  },
+  {
+   "id": "FP06",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What is the oldest EnteredOn value? (date and time, YYYY-MM-DD HH:MM)",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "2011-12-07 16:38",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "=MIN(Table1[EnteredOn]) formatted as date-time"
+   },
+   "traps": [
+    {
+     "value": "2011-09-12 14:08",
+     "message": "Your dates were imported with Danish settings. The file uses US dates (month/day/year), so 7/5/2016 became 7 May and 7/18/2016 stayed as text (and was silently skipped). Re-import with Data > From Text/CSV and set the locale to English (United States), or use Text to Columns with date format MDY. Always check: are the dates right-aligned?"
+    }
+   ],
+   "alternatives": [
+    "12/7/2011 16:38",
+    "07-12-2011 16:38",
+    "7 December 2011 16:38"
+   ]
+  },
+  {
+   "id": "FP07",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What is the newest EnteredOn value? (YYYY-MM-DD HH:MM)",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "2018-02-09 12:46",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "=MAX(Table1[EnteredOn])"
+   },
+   "traps": [
+    {
+     "value": "2018-12-01 21:43",
+     "message": "Your dates were imported with Danish settings. The file uses US dates (month/day/year), so 7/5/2016 became 7 May and 7/18/2016 stayed as text (and was silently skipped). Re-import with Data > From Text/CSV and set the locale to English (United States), or use Text to Columns with date format MDY. Always check: are the dates right-aligned?"
+    }
+   ],
+   "alternatives": [
+    "2/9/2018 12:46",
+    "09-02-2018 12:46",
+    "9 February 2018 12:46"
+   ]
+  },
+  {
+   "id": "FP08",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "How many different event types are there?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 4,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "PivotTable on EventType, or =COUNTA(UNIQUE(Table1[EventType]))"
+   },
+   "traps": []
+  },
+  {
+   "id": "FP09",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What is the most common event type?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "Shooting Permit",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "PivotTable: EventType in Rows, Count of EventID in Values, sort descending."
+   },
+   "traps": []
+  },
+  {
+   "id": "FP10",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What is the most common Category of shooting permit?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "Television",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "PivotTable filtered to EventType = Shooting Permit, Category in Rows."
+   },
+   "traps": []
+  },
+  {
+   "id": "FP11",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "How many shooting permits have been granted for student films?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 193,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "=COUNTIFS(Table1[EventType],\"Shooting Permit\",Table1[Category],\"Student\")"
+   },
+   "traps": [
+    {
+     "value": 282,
+     "message": "You did not filter to shooting permits."
+    }
+   ]
+  },
+  {
+   "id": "FP12",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What percentage of shooting permits required approval by more than one Community Board? (percent, 2 decimals)",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 7.84,
+    "tolerance": 0.01,
+    "unit": "%",
+    "label": null
+   },
+   "solution": {
+    "excel": "More than one board = the CommunityBoard(s) cell contains a comma: =COUNTIFS(Table1[EventType],\"Shooting Permit\",Table1[CommunityBoard(s)],\"*,*\") / COUNTIFS(Table1[EventType],\"Shooting Permit\")"
+   },
+   "traps": [
+    {
+     "value": 7.43,
+     "message": "You used all event types as the base. The question is about shooting permits only."
+    }
+   ],
+   "alternatives_scale": 0.01
+  },
+  {
+   "id": "FP13",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "In what year did shooting permits in Brooklyn first outnumber those in Manhattan (by start date)?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 2017,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "PivotTable: YEAR(StartDateTime) in Rows, Borough in Columns, filtered to Shooting Permit."
+   },
+   "traps": []
+  },
+  {
+   "id": "FP14",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What percentage of Manhattan shooting permits take place on or near Broadway (BROADWAY in ParkingHeld)? Round to the nearest percent.",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 20,
+    "tolerance": 0,
+    "unit": "%",
+    "label": null
+   },
+   "solution": {
+    "excel": "=COUNTIFS(Table1[EventType],\"Shooting Permit\",Table1[Borough],\"Manhattan\",Table1[ParkingHeld],\"*BROADWAY*\") / COUNTIFS(Table1[EventType],\"Shooting Permit\",Table1[Borough],\"Manhattan\")"
+   },
+   "traps": [
+    {
+     "value": 9,
+     "message": "Your denominator was all shooting permits. The question asks for the share of MANHATTAN permits."
+    }
+   ],
+   "alternatives_scale": 0.01
+  },
+  {
+   "id": "FP15",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "How many shooting permits since 2013 (by EnteredOn) were submitted from a foreign country?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 7,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "=COUNTIFS(Table1[EventType],\"Shooting Permit\",Table1[Country],\"<>United States of America\",Table1[EnteredOn],\">=\"&DATE(2013,1,1))"
+   },
+   "traps": [
+    {
+     "value": 26,
+     "message": "You counted all years. 'Since 2013' means EnteredOn on or after 1 Jan 2013."
+    }
+   ]
+  },
+  {
+   "id": "FP16",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What is the average duration of a shooting permit, in hours, rounded to the nearest half hour?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 17.0,
+    "tolerance": 0,
+    "unit": "hours",
+    "label": null
+   },
+   "solution": {
+    "excel": "Helper column =([@EndDateTime]-[@StartDateTime])*24, then AVERAGEIFS over shooting permits; round with =MROUND(x,0.5)."
+   },
+   "traps": [
+    {
+     "value": 20.5,
+     "message": "You averaged all event types, not only shooting permits."
+    },
+    {
+     "value": 163.0,
+     "message": "Your dates were imported with Danish settings. The file uses US dates (month/day/year), so 7/5/2016 became 7 May and 7/18/2016 stayed as text (and was silently skipped). Re-import with Data > From Text/CSV and set the locale to English (United States), or use Text to Columns with date format MDY. Always check: are the dates right-aligned?"
+    },
+    {
+     "value": 0.5,
+     "message": "Excel stores date differences in DAYS. Multiply by 24 to get hours."
+    }
+   ]
+  },
+  {
+   "id": "FP17",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What was the duration of the shortest shoot, in minutes?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 1,
+    "tolerance": 0,
+    "unit": "minutes",
+    "label": null
+   },
+   "solution": {
+    "excel": "=MIN(helper duration column)*60 if the helper is in hours (or *1440 if in days)."
+   },
+   "traps": [
+    {
+     "value": -478081,
+     "message": "Your dates were imported with Danish settings. The file uses US dates (month/day/year), so 7/5/2016 became 7 May and 7/18/2016 stayed as text (and was silently skipped). Re-import with Data > From Text/CSV and set the locale to English (United States), or use Text to Columns with date format MDY. Always check: are the dates right-aligned? (Negative durations are a sure sign of swapped day and month.)"
+    }
+   ]
+  },
+  {
+   "id": "FP18",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What is the average lead time in days between EnteredOn and StartDateTime for shooting permits? Round to the nearest day.",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 5,
+    "tolerance": 0,
+    "unit": "days",
+    "label": null
+   },
+   "solution": {
+    "excel": "Helper column =[@StartDateTime]-[@EnteredOn], AVERAGEIFS over shooting permits, ROUND(x,0)."
+   },
+   "traps": [
+    {
+     "value": 6,
+     "message": "You averaged all event types, not only shooting permits."
+    },
+    {
+     "value": 105,
+     "message": "Your dates were imported with Danish settings. The file uses US dates (month/day/year), so 7/5/2016 became 7 May and 7/18/2016 stayed as text (and was silently skipped). Re-import with Data > From Text/CSV and set the locale to English (United States), or use Text to Columns with date format MDY. Always check: are the dates right-aligned?"
+    }
+   ]
+  },
+  {
+   "id": "FP19",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What is the most common day of the week for a shooting permit to start? (full day name)",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "Thursday",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Helper column =TEXT([@StartDateTime],\"dddd\") then a PivotTable (set Excel to English or the names will be Danish)."
+   },
+   "traps": [
+    {
+     "value": "Friday",
+     "message": "Your dates were imported with Danish settings. The file uses US dates (month/day/year), so 7/5/2016 became 7 May and 7/18/2016 stayed as text (and was silently skipped). Re-import with Data > From Text/CSV and set the locale to English (United States), or use Text to Columns with date format MDY. Always check: are the dates right-aligned?"
+    }
+   ]
+  },
+  {
+   "id": "FP20",
+   "dataset": "film",
+   "subject": "Excel",
+   "case": "Excel Part 1 · NYC film permits (PwC)",
+   "prompt": "What percentage of shooting permits include shooting on at least part of a Friday? (percent, 2 decimals)",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 23.65,
+    "tolerance": 0.01,
+    "unit": "%",
+    "label": null
+   },
+   "solution": {
+    "excel": "A permit covers a Friday if any calendar day from INT(Start) to INT(End) is a Friday: e.g. =OR(WEEKDAY([@StartDateTime],2)=5, AND(INT([@EndDateTime])-INT([@StartDateTime])>=MOD(5-WEEKDAY([@StartDateTime],2),7)))."
+   },
+   "traps": [
+    {
+     "value": 17.93,
+     "message": "You only counted permits STARTING on a Friday. Multi-day permits that start earlier and run into Friday count too."
+    }
+   ],
+   "alternatives_scale": 0.01
+  },
+  {
+   "id": "E101",
+   "dataset": "etl1",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 1 (messy balance sheet)",
+   "prompt": "After cleaning, how many data rows (company-years) remain?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 21,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Remove the duplicated APVO 2018 row (Data > Remove Duplicates)."
+   },
+   "traps": [
+    {
+     "value": 22,
+     "message": "One row (APVO 2018) appears twice. Duplicates must be removed."
+    }
+   ]
+  },
+  {
+   "id": "E102",
+   "dataset": "etl1",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 1 (messy balance sheet)",
+   "prompt": "How many distinct companies are in the cleaned data?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 7,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Fix the tickers first: remove the spaces in 'A M Z N' / 'AM ZN' and fill the missing ticker for Armada Hoffler; then count unique tickers."
+   },
+   "traps": [
+    {
+     "value": 9,
+     "message": "You counted the raw tickers. 'AMZN', 'A M Z N' and 'AM ZN' are the same company, and the blank ticker is Armada Hoffler (AHH)."
+    },
+    {
+     "value": 8,
+     "message": "You counted the raw non-blank tickers. 'A M Z N' and 'AM ZN' are Amazon (AMZN)."
+    }
+   ]
+  },
+  {
+   "id": "E103",
+   "dataset": "etl1",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 1 (messy balance sheet)",
+   "prompt": "What was Apple's cash in 2017, in dollars?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 20300000000.0,
+    "tolerance": 1,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "'20300 M' means 20,300 million: strip the M and multiply by 1,000,000 (=LEFT(x,LEN(x)-2)*10^6). Watch out: the unquoted comma in 'Apple, Inc.' shifts Apple's columns on import."
+   },
+   "traps": [
+    {
+     "value": 20300,
+     "message": "You removed the 'M' but did not apply the unit. M = million, so multiply by 1,000,000."
+    },
+    {
+     "value": 20300000.0,
+     "message": "M stands for million (10^6), not thousand."
+    }
+   ]
+  },
+  {
+   "id": "E104",
+   "dataset": "etl1",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 1 (messy balance sheet)",
+   "prompt": "What was Aehr Test Systems' (AEHR) cash in 2016, in dollars?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 900000.0,
+    "tolerance": 1,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "'900 K' = 900 thousand = 900,000."
+   },
+   "traps": [
+    {
+     "value": 900,
+     "message": "K means thousand: multiply by 1,000."
+    },
+    {
+     "value": 900000000.0,
+     "message": "K is thousand, not million."
+    }
+   ]
+  },
+  {
+   "id": "E105",
+   "dataset": "etl1",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 1 (messy balance sheet)",
+   "prompt": "What was American Airlines' (AAL) Total Depreciation in 2017, as a number?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": -15600000000.0,
+    "tolerance": 1,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Accounting notation (15600000000) means NEGATIVE: =-SUBSTITUTE(SUBSTITUTE(x,\"(\",\"\"),\")\",\"\") or set the column format on import."
+   },
+   "traps": [
+    {
+     "value": 15600000000,
+     "message": "Parentheses mean a negative number in accounting notation. Depreciation is negative here, as in the other rows."
+    }
+   ]
+  },
+  {
+   "id": "E106",
+   "dataset": "etl1",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 1 (messy balance sheet)",
+   "prompt": "What were American Airlines' (AAL) Total Current Assets in 2016, in dollars?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 10300000000.0,
+    "tolerance": 1,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "This column is in millions (compare with Cash + Receivables + Inventories for the same row): 10300 * 1,000,000."
+   },
+   "traps": [
+    {
+     "value": 10300,
+     "message": "This column is in millions. Cash alone is $3.2 billion, so total current assets can't be $10,300. Multiply by 1,000,000."
+    },
+    {
+     "value": 10300000.0,
+     "message": "Check the scale: thousands would make total current assets ($10.3m) smaller than cash ($3.2bn). It's millions."
+    }
+   ]
+  },
+  {
+   "id": "E107",
+   "dataset": "etl1",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 1 (messy balance sheet)",
+   "prompt": "What were Aerocentury's (ACY) inventories in 2017 after cleaning?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 0.0,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "'-' is the accounting symbol for zero; replace it with 0 (Find & Replace, match entire cell)."
+   },
+   "traps": []
+  },
+  {
+   "id": "E201",
+   "dataset": "etl2",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 2 (text extraction)",
+   "prompt": "How many different plants does the company have (unique LocationPlantID such as USA-12)?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 133,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "LocationPlantID = LEFT(code,3)&\"-\"&MID(code,FIND(\"-\",code)+1,2); then =COUNTA(UNIQUE(range))."
+   },
+   "traps": [
+    {
+     "value": 17,
+     "message": "You counted unique PlantIDs only. Every country numbers its plants from 10, so plant 12 in the USA and plant 12 in Japan are different plants. That's why the case asks you to build LocationPlantID as the unique identifier."
+    }
+   ]
+  },
+  {
+   "id": "E202",
+   "dataset": "etl2",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 2 (text extraction)",
+   "prompt": "Which plant (LocationPlantID) has the most employees?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "ARG-15",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": "ARG-15 (11 employees)"
+   },
+   "solution": {
+    "excel": "PivotTable with LocationPlantID in Rows, count of EmpID, sort descending."
+   },
+   "traps": [
+    {
+     "value": "24",
+     "message": "That's a PlantID without its country. Report the LocationPlantID (e.g. USA-12)."
+    }
+   ]
+  },
+  {
+   "id": "E203",
+   "dataset": "etl2",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 2 (text extraction)",
+   "prompt": "How many employees in Germany are paid weekly?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 29,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "=COUNTIFS(Location,\"GER\",PayPeriod,\"W\") with PayPeriod = RIGHT(code,1)."
+   },
+   "traps": [
+    {
+     "value": 258,
+     "message": "You counted weekly-paid employees in all countries."
+    }
+   ]
+  },
+  {
+   "id": "E301",
+   "dataset": "etl3",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 3 (messy text extraction)",
+   "prompt": "How many employees are paid monthly?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 339,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Pay period is written 'M' or 'Mo'. Standardise first: =IF(LEFT(RIGHT(code,2),1)=\"M\",\"M\",RIGHT(code,1)) or Flash Fill, then COUNTIF."
+   },
+   "traps": [
+    {
+     "value": 158,
+     "message": "RIGHT(code,1) misses the codes ending in 'Mo'. Monthly is written two ways: 'M' and 'Mo'."
+    }
+   ]
+  },
+  {
+   "id": "E302",
+   "dataset": "etl3",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 3 (messy text extraction)",
+   "prompt": "How many employees work in the USA?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 86,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Locations are written inconsistently ('US', 'Japan', 'Canada' vs 3-letter codes). Extract the letters before the first digit, then map to standard codes (a small lookup table)."
+   },
+   "traps": [
+    {
+     "value": 0,
+     "message": "LEFT(code,3) assumes a 3-letter code, but the USA is written 'US' here, so LEFT gives 'US4'."
+    }
+   ]
+  },
+  {
+   "id": "E303",
+   "dataset": "etl3",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 3 (messy text extraction)",
+   "prompt": "After standardising, how many different plants (LocationPlantID) are there?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 133,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Location = letters before the first digit (mapped to the 3-letter code); PlantID = digits between '-' and the pay-period letters (1 or 2 digits)."
+   },
+   "traps": [
+    {
+     "value": 229,
+     "message": "You used fixed positions (LEFT 3 / 2 characters after '-'). In case 3 the location and plant lengths vary, so you got codes like 'Jap-4W'. Extract by pattern, not position."
+    }
+   ]
+  },
+  {
+   "id": "E401",
+   "dataset": "etl4",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 4 (journal entries)",
+   "prompt": "How many journal lines were prepared by Carolyn Slater?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 182,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "PreparerID is NOT unique: 101 is a different person in each business unit. Look up with both keys: =XLOOKUP([@PreparerID]&\"|\"&[@BusinessUnitID], PreparerInfo[PreparerID]&\"|\"&PreparerInfo[BusinessUnitID], PreparerInfo[PreparerName], \"Not found\")."
+   },
+   "traps": [
+    {
+     "value": 278,
+     "message": "You looked up PreparerID alone. VLOOKUP returns the FIRST 101 it finds (Carolyn Slater), so every 101 line in every business unit was assigned to her. The unique key is PreparerID + BusinessUnitID."
+    }
+   ]
+  },
+  {
+   "id": "E402",
+   "dataset": "etl4",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 4 (journal entries)",
+   "prompt": "How many journal lines have a PreparerID/BusinessUnitID combination that does not exist in PreparerInfo?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 148,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "With the two-key lookup, count the 'Not found' (or #N/A) results."
+   },
+   "traps": [
+    {
+     "value": 0,
+     "message": "A lookup on PreparerID alone always finds something, which hides these exceptions. With the correct two-part key, 148 lines have no valid preparer — an audit finding."
+    }
+   ]
+  },
+  {
+   "id": "E403",
+   "dataset": "etl4",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 4 (journal entries)",
+   "prompt": "What is the net amount (debits minus credits) posted to Expense accounts?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 529608.13,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "XLOOKUP AccountType from ChartOfAccounts on GLAccountNumber, then =SUMIFS(Amount, AccountType, \"Expenses\"). Amount is already signed (credits negative)."
+   },
+   "traps": [
+    {
+     "value": 574505.84,
+     "message": "You summed the Debit column only. Net amount = debits minus credits, which is the signed Amount column."
+    },
+    {
+     "value": 619403.55,
+     "message": "Credits are already stored as negative numbers. Debit - Credit double-counts them; use Debit + Credit (or the Amount column)."
+    }
+   ]
+  },
+  {
+   "id": "E404",
+   "dataset": "etl4",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 4 (journal entries)",
+   "prompt": "What is the sum of the Amount column over all journal lines? (A balanced journal should give 0.)",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 0.0,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "=SUM(JELineItems[Amount]) — every entry's debits and credits should net to zero."
+   },
+   "traps": [
+    {
+     "value": 1130428.13,
+     "message": "That's total debits. The signed Amount column should sum to 0 if every entry balances."
+    }
+   ]
+  },
+  {
+   "id": "E405",
+   "dataset": "etl4",
+   "subject": "Excel",
+   "case": "Excel Part 2 · ETL case 4 (journal entries)",
+   "prompt": "After cleaning PreparerName, how many characters long is Carolyn Slater's full entry 'Carolyn Slater|Food Operations Manager'?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 38,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "The names are padded with non-breaking spaces (CHAR(160)), which TRIM does not remove: =TRIM(SUBSTITUTE(A2,CHAR(160),\" \"))."
+   },
+   "traps": [
+    {
+     "value": 44,
+     "message": "TRIM only removes normal spaces (CHAR(32)). The padding here is CHAR(160), a non-breaking space; replace it first with SUBSTITUTE."
+    },
+    {
+     "value": 45,
+     "message": "You didn't clean the name at all: it has trailing non-breaking spaces (CHAR(160)) and a normal space."
+    }
+   ]
+  },
+  {
+   "id": "IC01",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "What were total gross wages (regular + overtime pay) in the first six months of 2015?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 1086734.19,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "=SUM(2015Data[Reg_Pay]) + SUM(2015Data[OT_Pay])"
+   },
+   "traps": [
+    {
+     "value": 1072201.16,
+     "message": "You only summed Reg_Pay. In 2015, gross pay = Reg_Pay + OT_Pay (2016's Gross_Wages already combines them)."
+    },
+    {
+     "value": 1225566.22,
+     "message": "You added the payroll taxes and workers' comp. Gross wages are pay only."
+    }
+   ]
+  },
+  {
+   "id": "IC02",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "What were total gross wages in the first six months of 2016?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 1352789.75,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "=SUM(2016Data[Gross_Wages])"
+   },
+   "traps": [
+    {
+     "value": 1319838.46,
+     "message": "You excluded the rows without an employee number. They are still wages the company recorded; the question asks for the total as reported (flag them separately)."
+    }
+   ]
+  },
+  {
+   "id": "IC03",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "By how much did gross wages increase from H1 2015 to H1 2016? (2016 minus 2015)",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 266055.56,
+    "tolerance": 1,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "=IC02 - IC01. Noah's 'about $266,000' should reconcile to this."
+   },
+   "traps": [
+    {
+     "value": 280588.59,
+     "message": "Your 2015 figure left out overtime pay (Reg_Pay only)."
+    },
+    {
+     "value": -266055.56,
+     "message": "Sign reversed: the case defines differences as 2016 minus 2015 (positive = 2016 higher)."
+    }
+   ]
+  },
+  {
+   "id": "IC04",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "Which job code (3-digit text) had the largest increase in gross pay from 2015 to 2016? Also give its description.",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "009",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": "009 – New Foreign Manufacturing Plant (+132,294.35)"
+   },
+   "solution": {
+    "excel": "Add a JobCode column to both years (Job code = the 3 digits after the 2-digit year and the optional H/S letter: =IF(ISNUMBER(--MID([@Job],3,1)), MID([@Job],3,3), MID([@Job],4,3)) — keep it as TEXT so \"001\" matches the JobCodes table.), then SUMIFS gross pay per code per year and subtract."
+   },
+   "traps": [
+    {
+     "value": "H00",
+     "message": "Your job codes are wrong for codes with an H or S letter. MID(Job,3,3) on '14H002' returns 'H00'. Check for the letter first."
+    },
+    {
+     "value": "9",
+     "message": "Right code, but stored as a number. Job codes must stay as 3-digit text ('009'), or lookups to the JobCodes table fail."
+    }
+   ],
+   "alternatives": [
+    "009 New Foreign Manufacturing Plant",
+    "New Foreign Manufacturing Plant"
+   ]
+  },
+  {
+   "id": "IC05",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "What was the 2016 gross pay per hour for job code 001 (Office)? (2 decimals)",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 35.11,
+    "tolerance": 0.01,
+    "unit": "USD/hour",
+    "label": null
+   },
+   "solution": {
+    "excel": "=SUMIFS(gross,code,\"001\") / SUMIFS(total hours,code,\"001\"), where total hours = Hours + OT_Hours."
+   },
+   "traps": [
+    {
+     "value": 35.4,
+     "message": "You divided by regular hours only. Gross pay includes overtime pay, so divide by regular + overtime hours."
+    },
+    {
+     "value": 30.05,
+     "message": "You averaged the row-level rates. A weighted rate is total pay / total hours."
+    }
+   ]
+  },
+  {
+   "id": "IC06",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "How many 2016 transactions were entered without an employee number ('phantom' entries)?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 68,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "=COUNTBLANK(2016Data[Employee_Number])"
+   },
+   "traps": []
+  },
+  {
+   "id": "IC07",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "What is the total gross wage amount of those phantom entries?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 32951.29,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "=SUMIFS(2016Data[Gross_Wages],2016Data[Employee_Number],\"\")"
+   },
+   "traps": []
+  },
+  {
+   "id": "IC08",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "Which employee earned the most overtime pay in H1 2015, and how much? (enter the amount)",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 4186.24,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": "Cindy Lunt (Emp_No 27): 4,186.24"
+   },
+   "solution": {
+    "excel": "PivotTable on 2015Data: Emp_No and name in Rows, Sum of OT_Pay, sort descending."
+   },
+   "traps": [
+    {
+     "value": 91.5,
+     "message": "That's overtime HOURS. The question asks for overtime pay."
+    }
+   ]
+  },
+  {
+   "id": "IC09",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "Which job code had the most overtime pay in 2015?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "006",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": "006 – Service: 6,007.52"
+   },
+   "solution": {
+    "excel": "Add JobCode to 2015Data (Job code = the 3 digits after the 2-digit year and the optional H/S letter: =IF(ISNUMBER(--MID([@Job],3,1)), MID([@Job],3,3), MID([@Job],4,3)) — keep it as TEXT so \"001\" matches the JobCodes table.), PivotTable with JobCode rows and Sum of OT_Pay, sort descending."
+   },
+   "traps": [
+    {
+     "value": "H00",
+     "message": "Your job codes are wrong for codes with an H or S letter (MID(Job,3,3) on '14H002' gives 'H00')."
+    }
+   ],
+   "alternatives": [
+    "Service"
+   ]
+  },
+  {
+   "id": "IC10",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "In 2015, how many employee/pay-date combinations show overtime hours even though fewer than 40 regular hours were worked on that pay date?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 103,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Sum Reg_Hrs and OT_Hrs per employee per Pay_Date first (PivotTable or SUMIFS), THEN test Reg < 40 and OT > 0."
+   },
+   "traps": [
+    {
+     "value": 190,
+     "message": "You tested individual rows. Each row is only one job code; an employee's hours for the pay period are spread over several rows. Total them per employee and pay date first."
+    },
+    {
+     "value": 130,
+     "message": "Exactly 40 regular hours is a full week, so overtime is legitimate there. Use < 40."
+    }
+   ]
+  },
+  {
+   "id": "IC11",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "What was the total employee cost for all projects in H1 2016 (wages + Social Security/Medicare + FUTA + SUTA + workers' comp)?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 1486454.83,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "excel": "=SUM over the five columns."
+   },
+   "traps": [
+    {
+     "value": 1476400.65,
+     "message": "You left out workers' compensation."
+    },
+    {
+     "value": 1352789.75,
+     "message": "That's gross wages only. Employee cost adds the employer taxes and workers' comp."
+    }
+   ]
+  },
+  {
+   "id": "IC12",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "In 2016, what was the average gross pay per hour at location 1 minus location 2? (2 decimals; phantom entries excluded)",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": -4.81,
+    "tolerance": 0.01,
+    "unit": "USD/hour",
+    "label": null
+   },
+   "solution": {
+    "excel": "XLOOKUP each employee's Location from the P4 Location tab, then per location: SUM(Gross_Wages)/SUM(Hours+OT_Hours)."
+   },
+   "traps": [
+    {
+     "value": -4.76,
+     "message": "You divided by regular hours only."
+    },
+    {
+     "value": -14.81,
+     "message": "You averaged row-level rates instead of total pay / total hours."
+    }
+   ],
+   "note": "Location 1: 30.84/h, location 2: 35.65/h. Unmatched names: 0."
+  },
+  {
+   "id": "IC13",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "In which month of H1 2015 were gross wages highest (so Noah needs extra cash)?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "May",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "Add =MONTH([@Pay_Date]) to 2015Data (check that Pay_Date imported as real dates), then SUMIFS gross pay per month."
+   },
+   "traps": [
+    {
+     "value": "June",
+     "message": "Your pay dates were read as day/month (Danish settings). The file uses US dates: 1/9/2015 is 9 January, not 1 September, and 1/16/2015 stays as text. Re-import with locale English (United States)."
+    }
+   ],
+   "note": "May is about $43,000 above the next-highest month. It had 7 pay dates (5 Friday paydays + 2 other runs), but so did January, so the pay-date count alone does not explain it — worth investigating.",
+   "monthly_gross_2015": {
+    "January": 178365.77,
+    "February": 172077.31,
+    "March": 177246.39,
+    "April": 174235.29,
+    "May": 221517.17,
+    "June": 163292.26
+   }
+  },
+  {
+   "id": "IC14",
+   "dataset": "payroll",
+   "subject": "Excel",
+   "case": "Excel Part 3 · IntegrateCo payroll",
+   "prompt": "Job codes must be 001–012. How many 2015 rows have a job code outside that range?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 1,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "excel": "After extracting the JobCode, look it up in the JobCodes table; count the #N/A results (=COUNTIF(lookup column,\"#N/A\") or ISNA)."
+   },
+   "traps": [
+    {
+     "value": 0,
+     "message": "Check again: one Job value ('14S1440') contains '144' as its job code, which is not in the table."
+    }
+   ],
+   "note": "The suffixes R and SH (e.g. 14H001R, 15H010SH) are not in the case description but don't change the job code."
+  },
+  {
+   "id": "CH01",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many columns does the Customer table have?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 13,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM pragma_table_info('Customer');"
+   },
+   "traps": [],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      13
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH02",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "If you select only the first 5 rows of the Customer table, what is the Country in the last of those rows?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "Czech Republic",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT Country FROM (SELECT * FROM Customer LIMIT 5) LIMIT 1 OFFSET 4;"
+   },
+   "traps": [
+    {
+     "value": "Brazil",
+     "message": "You sorted before taking the first 5 rows. The question asks for the first 5 rows as stored (no ORDER BY)."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "Country"
+    ],
+    "rows": [
+     [
+      "Czech Republic"
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH03",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "If you sort the Customer table on last name (A to Z), what is the last name in the third row?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "Bernard",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT LastName FROM Customer ORDER BY LastName LIMIT 1 OFFSET 2;"
+   },
+   "traps": [
+    {
+     "value": "Wichterlová",
+     "message": "You sorted Z to A. ORDER BY is ascending by default; don't add DESC."
+    },
+    {
+     "value": "Brooks",
+     "message": "Off by one: OFFSET 2 skips two rows and returns the third. OFFSET 3 returns the fourth."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "LastName"
+    ],
+    "rows": [
+     [
+      "Bernard"
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH04",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many rows are in the Invoice table?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 412,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM Invoice;"
+   },
+   "traps": [],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      412
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH05",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many invoices have totals greater than $20?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 4,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM Invoice WHERE Total > 20;"
+   },
+   "traps": [],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      4
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH06",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many invoices have totals greater than $10 and less than $20?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 60,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM Invoice WHERE Total > 10 AND Total < 20;"
+   },
+   "traps": [
+    {
+     "value": 412,
+     "message": "You used OR. Every invoice is either above 10 or below 20, so OR returns (almost) everything. Both conditions must hold: AND."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      60
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH07",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many invoices are from customers in Brazil, Argentina or Chile?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 49,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM Invoice WHERE BillingCountry IN ('Brazil','Argentina','Chile');"
+   },
+   "traps": [
+    {
+     "value": 0,
+     "message": "A single invoice can't be in two countries at once, so AND returns 0. Use IN (...) or OR."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      49
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH08",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many invoices have a billing country that starts with 'C'?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 77,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM Invoice WHERE BillingCountry LIKE 'C%';"
+   },
+   "traps": [
+    {
+     "value": 112,
+     "message": "'%C%' finds a C anywhere (and LIKE ignores case in SQLite, so every 'c' counts too). 'Starts with' is 'C%'."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      77
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH09",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many customers list their company?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 10,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(Company) FROM Customer;"
+   },
+   "traps": [
+    {
+     "value": 59,
+     "message": "COUNT(*) counts every customer. COUNT(Company) counts only the rows where Company is filled in (not NULL)."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "COUNT(Company)"
+    ],
+    "rows": [
+     [
+      10
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH10",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many employees does Chinook have?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 8,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM Employee;"
+   },
+   "traps": [],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      8
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH11",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How long (in characters) is the longest employee last name?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 8,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT MAX(LENGTH(LastName)) FROM Employee;"
+   },
+   "traps": [
+    {
+     "value": 12,
+     "message": "You measured the Customer table. The question is about employees."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "MAX(LENGTH(LastName))"
+    ],
+    "rows": [
+     [
+      8
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH12",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many employees were born on a Sunday?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 2,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM Employee WHERE strftime('%w', BirthDate) = '0';"
+   },
+   "traps": [
+    {
+     "value": 0,
+     "message": "In SQLite strftime('%w') returns 0-6 with Sunday = 0. There is no 7."
+    },
+    {
+     "value": 1,
+     "message": "Sunday is '0' in strftime('%w'); '1' is Monday. (Excel's WEEKDAY uses Sunday = 1, so it's easy to mix up.)"
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      2
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH13",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How old (in years) was the oldest employee when they were hired? Round to one decimal.",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 55.6,
+    "tolerance": 0.1,
+    "unit": "years",
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT ROUND(MAX((julianday(HireDate) - julianday(BirthDate)) / 365.25), 1) FROM Employee;"
+   },
+   "traps": [
+    {
+     "value": 56,
+     "message": "You subtracted calendar years only. That ignores whether the birthday had passed. Use the difference in days / 365.25."
+    },
+    {
+     "value": 79.2,
+     "message": "You computed age today, not age at the hire date."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "ROUND(MAX((julianday(HireDate) - julianday(BirthDate)) / 365.25), 1)"
+    ],
+    "rows": [
+     [
+      55.6
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH14",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "Which billing country has the highest total invoice value?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "USA",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT BillingCountry FROM Invoice GROUP BY BillingCountry ORDER BY SUM(Total) DESC LIMIT 1;"
+   },
+   "traps": [
+    {
+     "value": "Argentina",
+     "message": "You sorted ascending, which gives the lowest total."
+    }
+   ],
+   "follow_up_sql": "SELECT BillingCountry, ROUND(SUM(Total),2) AS TotalValue FROM Invoice GROUP BY BillingCountry ORDER BY TotalValue DESC;",
+   "expected_result": {
+    "columns": [
+     "BillingCountry"
+    ],
+    "rows": [
+     [
+      "USA"
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH15",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many invoice line items are there?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 2240,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM InvoiceLine;"
+   },
+   "traps": [
+    {
+     "value": 412,
+     "message": "That's the number of invoices. Each invoice has several line items in InvoiceLine."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      2240
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH16",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many downloads at the $0.99 price have happened?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 2129,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT SUM(Quantity) FROM InvoiceLine WHERE UnitPrice = 0.99;"
+   },
+   "traps": [
+    {
+     "value": 3290,
+     "message": "You counted tracks in the catalogue. Downloads are sales, which are in InvoiceLine."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "SUM(Quantity)"
+    ],
+    "rows": [
+     [
+      2129
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH17",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many tracks have been downloaded the maximum number of times (i.e. are tied for most downloads)?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 256,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM (SELECT TrackId, SUM(Quantity) AS n FROM InvoiceLine GROUP BY TrackId)\nWHERE n = (SELECT MAX(n) FROM (SELECT SUM(Quantity) AS n FROM InvoiceLine GROUP BY TrackId));"
+   },
+   "traps": [
+    {
+     "value": 1984,
+     "message": "That's the number of tracks downloaded at least once. Find the maximum downloads per track, then count tracks at that maximum."
+    },
+    {
+     "value": 2,
+     "message": "That's the maximum number of downloads (2), not the number of tracks that reached it. 'Top 5' would be misleading here: hundreds of tracks are tied."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "COUNT(*)"
+    ],
+    "rows": [
+     [
+      256
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH18",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "How many days separate the first and the last invoice date?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 1816.0,
+    "tolerance": 0,
+    "unit": "days",
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT julianday(MAX(InvoiceDate)) - julianday(MIN(InvoiceDate)) FROM Invoice;"
+   },
+   "traps": [
+    {
+     "value": 4,
+     "message": "Subtracting the date text gives the difference in years only (2013 - 2009). Convert with julianday() to get days."
+    }
+   ],
+   "note": "About 5 years.",
+   "expected_result": {
+    "columns": [
+     "julianday(MAX(InvoiceDate)) - julianday(MIN(InvoiceDate))"
+    ],
+    "rows": [
+     [
+      1816.0
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH19",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "An album counts as downloaded when ALL its tracks appear on a single invoice. How many distinct albums have been downloaded?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 41,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(DISTINCT a.AlbumId) FROM Album a\nWHERE EXISTS (\n  SELECT 1 FROM InvoiceLine il JOIN Track t ON t.TrackId = il.TrackId\n  WHERE t.AlbumId = a.AlbumId GROUP BY il.InvoiceId\n  HAVING COUNT(DISTINCT il.TrackId) = (SELECT COUNT(*) FROM Track t2 WHERE t2.AlbumId = a.AlbumId));"
+   },
+   "traps": [
+    {
+     "value": 304,
+     "message": "You counted albums with at least one track sold. Under the stated definition, all the album's tracks must be on the same invoice."
+    },
+    {
+     "value": 49,
+     "message": "You counted complete-album purchases (invoice + album pairs). Some albums were bought on more than one invoice, so count DISTINCT AlbumId. (The PwC answer sheet reports 49, which is this purchase count.)"
+    }
+   ],
+   "note": "Every album that qualifies has only one track, so the definition is weaker than it sounds.",
+   "expected_result": {
+    "columns": [
+     "COUNT(DISTINCT a.AlbumId)"
+    ],
+    "rows": [
+     [
+      41
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH20",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "What is the most popular genre (by tracks sold)?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "Rock",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT g.Name FROM InvoiceLine il JOIN Track t ON t.TrackId = il.TrackId JOIN Genre g ON g.GenreId = t.GenreId\nGROUP BY g.Name ORDER BY SUM(il.Quantity) DESC LIMIT 1;"
+   },
+   "traps": [],
+   "expected_result": {
+    "columns": [
+     "Name"
+    ],
+    "rows": [
+     [
+      "Rock"
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "CH21",
+   "dataset": "chinook",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Chinook (PwC)",
+   "prompt": "Show customer names (first and last), invoice IDs and totals for invoices billed to the United Kingdom. How many rows?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 21,
+    "tolerance": 0,
+    "unit": null,
+    "label": "21 rows"
+   },
+   "solution": {
+    "sql": "SELECT c.FirstName, c.LastName, i.InvoiceId, i.Total FROM Invoice i JOIN Customer c ON c.CustomerId = i.CustomerId\nWHERE i.BillingCountry = 'United Kingdom';"
+   },
+   "traps": [
+    {
+     "value": 0,
+     "message": "The data spells it 'United Kingdom'. Check the values first with SELECT DISTINCT BillingCountry."
+    },
+    {
+     "value": 1239,
+     "message": "You listed both tables without a join condition (a cross join), so every invoice was paired with every customer. Join ON CustomerId."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "FirstName",
+     "LastName",
+     "InvoiceId",
+     "Total"
+    ],
+    "rows": [
+     [
+      "Emma",
+      "Jones",
+      11,
+      8.91
+     ],
+     [
+      "Steve",
+      "Murray",
+      20,
+      0.99
+     ],
+     [
+      "Phil",
+      "Hughes",
+      43,
+      1.98
+     ],
+     [
+      "Phil",
+      "Hughes",
+      54,
+      13.86
+     ],
+     [
+      "Phil",
+      "Hughes",
+      109,
+      8.91
+     ],
+     [
+      "Emma",
+      "Jones",
+      140,
+      1.98
+     ],
+     [
+      "Steve",
+      "Murray",
+      141,
+      1.98
+     ],
+     [
+      "Steve",
+      "Murray",
+      152,
+      13.86
+     ],
+     [
+      "Emma",
+      "Jones",
+      163,
+      3.96
+     ],
+     [
+      "Emma",
+      "Jones",
+      185,
+      5.94
+     ],
+     [
+      "Steve",
+      "Murray",
+      207,
+      8.91
+     ],
+     [
+      "Emma",
+      "Jones",
+      237,
+      0.99
+     ],
+     [
+      "Phil",
+      "Hughes",
+      238,
+      1.98
+     ],
+     [
+      "Phil",
+      "Hughes",
+      261,
+      3.96
+     ],
+     [
+      "Phil",
+      "Hughes",
+      283,
+      5.94
+     ],
+     [
+      "Phil",
+      "Hughes",
+      335,
+      0.99
+     ],
+     [
+      "Steve",
+      "Murray",
+      336,
+      1.98
+     ],
+     [
+      "Emma",
+      "Jones",
+      358,
+      1.98
+     ],
+     [
+      "Steve",
+      "Murray",
+      359,
+      3.96
+     ],
+     [
+      "Emma",
+      "Jones",
+      369,
+      13.86
+     ],
+     [
+      "Steve",
+      "Murray",
+      381,
+      5.94
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "SG01",
+   "dataset": "songs",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 songs",
+   "prompt": "List the names and energy of all songs.",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 100,
+    "tolerance": 0,
+    "unit": null,
+    "label": "100 rows"
+   },
+   "solution": {
+    "sql": "SELECT name, energy FROM songs;"
+   },
+   "traps": [],
+   "expected_result": {
+    "columns": [
+     "name",
+     "energy"
+    ],
+    "rows": [
+     [
+      "God's Plan",
+      0.449
+     ],
+     [
+      "SAD!",
+      0.613
+     ],
+     [
+      "rockstar (feat. 21 Savage)",
+      0.535
+     ],
+     [
+      "Psycho (feat. Ty Dolla $ign)",
+      0.559
+     ],
+     [
+      "In My Feelings",
+      0.626
+     ],
+     [
+      "Better Now",
+      0.563
+     ],
+     [
+      "I Like It",
+      0.726
+     ],
+     [
+      "One Kiss (with Dua Lipa)",
+      0.862
+     ],
+     [
+      "IDGAF",
+      0.544
+     ],
+     [
+      "FRIENDS",
+      0.88
+     ],
+     [
+      "Havana",
+      0.523
+     ],
+     [
+      "Lucid Dreams",
+      0.566
+     ],
+     [
+      "Nice For What",
+      0.909
+     ],
+     [
+      "Girls Like You (feat. Cardi B)",
+      0.541
+     ],
+     [
+      "The Middle",
+      0.657
+     ],
+     [
+      "All The Stars (with SZA)",
+      0.633
+     ],
+     [
+      "no tears left to cry",
+      0.713
+     ],
+     [
+      "X",
+      0.773
+     ],
+     [
+      "Moonlight",
+      0.537
+     ],
+     [
+      "Look Alive (feat. Drake)",
+      0.581
+     ],
+     [
+      "These Days (feat. Jess Glynne, Macklemore & Dan Caplen)",
+      0.809
+     ],
+     [
+      "Te Bote - Remix",
+      0.675
+     ],
+     [
+      "Mine",
+      0.789
+     ],
+     [
+      "Youngblood",
+      0.854
+     ],
+     [
+      "New Rules",
+      0.7
+     ],
+     [
+      "Shape of You",
+      0.652
+     ],
+     [
+      "Love Lies (with Normani)",
+      0.648
+     ],
+     [
+      "Meant to Be (feat. Florida Georgia Line)",
+      0.772
+     ],
+     [
+      "Jocelyn Flores",
+      0.391
+     ],
+     [
+      "Perfect",
+      0.448
+     ],
+     [
+      "Taste (feat. Offset)",
+      0.559
+     ],
+     [
+      "Solo (feat. Demi Lovato)",
+      0.636
+     ],
+     [
+      "I Fall Apart",
+      0.538
+     ],
+     [
+      "Nevermind",
+      0.691
+     ],
+     [
+      "Echame La Culpa",
+      0.889
+     ],
+     [
+      "Eastside (with Halsey & Khalid)",
+      0.68
+     ],
+     [
+      "Never Be the Same",
+      0.713
+     ],
+     [
+      "Wolves",
+      0.807
+     ],
+     [
+      "changes",
+      0.308
+     ],
+     [
+      "In My Mind",
+      0.77
+     ],
+     [
+      "River (feat. Ed Sheeran)",
+      0.749
+     ],
+     [
+      "Dura",
+      0.848
+     ],
+     [
+      "SICKO MODE",
+      0.73
+     ],
+     [
+      "Thunder",
+      0.822
+     ],
+     [
+      "Me Niego",
+      0.779
+     ],
+     [
+      "Jackie Chan",
+      0.834
+     ],
+     [
+      "Finesse (Remix) [feat. Cardi B]",
+      0.859
+     ],
+     [
+      "Back To You - From 13 Reasons Why",
+      0.724
+     ],
+     [
+      "Let You Down",
+      0.721
+     ],
+     [
+      "Call Out My Name",
+      0.598
+     ],
+     [
+      "Ric Flair Drip (& Metro Boomin)",
+      0.428
+     ],
+     [
+      "Happier",
+      0.792
+     ],
+     [
+      "Too Good At Goodbyes",
+      0.375
+     ],
+     [
+      "Freaky Friday (feat. Chris Brown)",
+      0.599
+     ],
+     [
+      "Believer",
+      0.78
+     ],
+     [
+      "FEFE (feat. Nicki Minaj & Murda Beatz)",
+      0.387
+     ],
+     [
+      "Rise",
+      0.785
+     ],
+     [
+      "Body (feat. brando)",
+      0.764
+     ],
+     [
+      "XO TOUR Llif3",
+      0.75
+     ],
+     [
+      "Sin Pijama",
+      0.745
+     ],
+     [
+      "2002",
+      0.683
+     ],
+     [
+      "Nonstop",
+      0.412
+     ],
+     [
+      "Fuck Love (feat. Trippie Redd)",
+      0.533
+     ],
+     [
+      "In My Blood",
+      0.712
+     ],
+     [
+      "Silence",
+      0.761
+     ],
+     [
+      "God is a woman",
+      0.658
+     ],
+     [
+      "Dejala que vuelva (feat. Manuel Turizo)",
+      0.788
+     ],
+     [
+      "Flames",
+      0.649
+     ],
+     [
+      "What Lovers Do",
+      0.597
+     ],
+     [
+      "Taki Taki (with Selena Gomez, Ozuna & Cardi B)",
+      0.798
+     ],
+     [
+      "Let Me Go (with Alesso, Florida Georgia Line & watt)",
+      0.708
+     ],
+     [
+      "Feel It Still",
+      0.795
+     ],
+     [
+      "Pray For Me (with Kendrick Lamar)",
+      0.677
+     ],
+     [
+      "Walk It Talk It",
+      0.628
+     ],
+     [
+      "Him & I (with Halsey)",
+      0.731
+     ],
+     [
+      "Candy Paint",
+      0.654
+     ],
+     [
+      "Congratulations",
+      0.804
+     ],
+     [
+      "1, 2, 3 (feat. Jason Derulo & De La Ghetto)",
+      0.895
+     ],
+     [
+      "Criminal",
+      0.813
+     ],
+     [
+      "Plug Walk",
+      0.519
+     ],
+     [
+      "lovely (with Khalid)",
+      0.296
+     ],
+     [
+      "Stir Fry",
+      0.816
+     ],
+     [
+      "HUMBLE.",
+      0.621
+     ],
+     [
+      "Vaina Loca",
+      0.805
+     ],
+     [
+      "Perfect Duet (Ed Sheeran & Beyonc?)",
+      0.299
+     ],
+     [
+      "Corazon (feat. Nego do Borel)",
+      0.738
+     ],
+     [
+      "Young Dumb & Broke",
+      0.539
+     ],
+     [
+      "Siguelo Bailando",
+      0.664
+     ],
+     [
+      "Downtown",
+      0.679
+     ],
+     [
+      "Bella",
+      0.493
+     ],
+     [
+      "Promises (with Sam Smith)",
+      0.768
+     ],
+     [
+      "Yes Indeed",
+      0.346
+     ],
+     [
+      "I Like Me Better",
+      0.505
+     ],
+     [
+      "This Is Me",
+      0.704
+     ],
+     [
+      "Everybody Dies In Their Nightmares",
+      0.57
+     ],
+     [
+      "Rewrite The Stars",
+      0.619
+     ],
+     [
+      "I Miss You (feat. Julia Michaels)",
+      0.658
+     ],
+     [
+      "No Brainer",
+      0.76
+     ],
+     [
+      "Dusk Till Dawn - Radio Edit",
+      0.437
+     ],
+     [
+      "Be Alright",
+      0.586
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "SG02",
+   "dataset": "songs",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 songs",
+   "prompt": "List the names of all songs in decreasing order of tempo.",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 100,
+    "tolerance": 0,
+    "unit": null,
+    "label": "100 rows"
+   },
+   "solution": {
+    "sql": "SELECT name FROM songs ORDER BY tempo DESC;"
+   },
+   "traps": [],
+   "expected_result": {
+    "columns": [
+     "name"
+    ],
+    "rows": [
+     [
+      "Corazon (feat. Nego do Borel)"
+     ],
+     [
+      "This Is Me"
+     ],
+     [
+      "Stir Fry"
+     ],
+     [
+      "X"
+     ],
+     [
+      "Dusk Till Dawn - Radio Edit"
+     ],
+     [
+      "Candy Paint"
+     ],
+     [
+      "Dejala que vuelva (feat. Manuel Turizo)"
+     ],
+     [
+      "Thunder"
+     ],
+     [
+      "Downtown"
+     ],
+     [
+      "rockstar (feat. 21 Savage)"
+     ],
+     [
+      "XO TOUR Llif3"
+     ],
+     [
+      "SICKO MODE"
+     ],
+     [
+      "Nonstop"
+     ],
+     [
+      "Meant to Be (feat. Florida Georgia Line)"
+     ],
+     [
+      "HUMBLE."
+     ],
+     [
+      "Let You Down"
+     ],
+     [
+      "Walk It Talk It"
+     ],
+     [
+      "God is a woman"
+     ],
+     [
+      "Better Now"
+     ],
+     [
+      "Love Lies (with Normani)"
+     ],
+     [
+      "I Fall Apart"
+     ],
+     [
+      "Mine"
+     ],
+     [
+      "Silence"
+     ],
+     [
+      "Psycho (feat. Ty Dolla $ign)"
+     ],
+     [
+      "In My Blood"
+     ],
+     [
+      "Look Alive (feat. Drake)"
+     ],
+     [
+      "Young Dumb & Broke"
+     ],
+     [
+      "I Like It"
+     ],
+     [
+      "No Brainer"
+     ],
+     [
+      "Call Out My Name"
+     ],
+     [
+      "Jocelyn Flores"
+     ],
+     [
+      "Freaky Friday (feat. Chris Brown)"
+     ],
+     [
+      "Fuck Love (feat. Trippie Redd)"
+     ],
+     [
+      "Everybody Dies In Their Nightmares"
+     ],
+     [
+      "Never Be the Same"
+     ],
+     [
+      "Moonlight"
+     ],
+     [
+      "Jackie Chan"
+     ],
+     [
+      "Be Alright"
+     ],
+     [
+      "FEFE (feat. Nicki Minaj & Murda Beatz)"
+     ],
+     [
+      "In My Mind"
+     ],
+     [
+      "Rewrite The Stars"
+     ],
+     [
+      "Girls Like You (feat. Cardi B)"
+     ],
+     [
+      "Believer"
+     ],
+     [
+      "Wolves"
+     ],
+     [
+      "One Kiss (with Dua Lipa)"
+     ],
+     [
+      "Congratulations"
+     ],
+     [
+      "Promises (with Sam Smith)"
+     ],
+     [
+      "no tears left to cry"
+     ],
+     [
+      "Body (feat. brando)"
+     ],
+     [
+      "Youngblood"
+     ],
+     [
+      "Yes Indeed"
+     ],
+     [
+      "New Rules"
+     ],
+     [
+      "lovely (with Khalid)"
+     ],
+     [
+      "What Lovers Do"
+     ],
+     [
+      "The Middle"
+     ],
+     [
+      "Rise"
+     ],
+     [
+      "Finesse (Remix) [feat. Cardi B]"
+     ],
+     [
+      "I Miss You (feat. Julia Michaels)"
+     ],
+     [
+      "Solo (feat. Demi Lovato)"
+     ],
+     [
+      "Havana"
+     ],
+     [
+      "Let Me Go (with Alesso, Florida Georgia Line & watt)"
+     ],
+     [
+      "Back To You - From 13 Reasons Why"
+     ],
+     [
+      "Pray For Me (with Kendrick Lamar)"
+     ],
+     [
+      "Happier"
+     ],
+     [
+      "Ric Flair Drip (& Metro Boomin)"
+     ],
+     [
+      "Nevermind"
+     ],
+     [
+      "Siguelo Bailando"
+     ],
+     [
+      "Taste (feat. Offset)"
+     ],
+     [
+      "IDGAF"
+     ],
+     [
+      "All The Stars (with SZA)"
+     ],
+     [
+      "Te Bote - Remix"
+     ],
+     [
+      "2002"
+     ],
+     [
+      "Echame La Culpa"
+     ],
+     [
+      "Shape of You"
+     ],
+     [
+      "Taki Taki (with Selena Gomez, Ozuna & Cardi B)"
+     ],
+     [
+      "FRIENDS"
+     ],
+     [
+      "Perfect"
+     ],
+     [
+      "Dura"
+     ],
+     [
+      "Perfect Duet (Ed Sheeran & Beyonc?)"
+     ],
+     [
+      "Plug Walk"
+     ],
+     [
+      "1, 2, 3 (feat. Jason Derulo & De La Ghetto)"
+     ],
+     [
+      "Me Niego"
+     ],
+     [
+      "Bella"
+     ],
+     [
+      "Sin Pijama"
+     ],
+     [
+      "Vaina Loca"
+     ],
+     [
+      "Flames"
+     ],
+     [
+      "Nice For What"
+     ],
+     [
+      "These Days (feat. Jess Glynne, Macklemore & Dan Caplen)"
+     ],
+     [
+      "I Like Me Better"
+     ],
+     [
+      "Too Good At Goodbyes"
+     ],
+     [
+      "In My Feelings"
+     ],
+     [
+      "River (feat. Ed Sheeran)"
+     ],
+     [
+      "Eastside (with Halsey & Khalid)"
+     ],
+     [
+      "Him & I (with Halsey)"
+     ],
+     [
+      "Lucid Dreams"
+     ],
+     [
+      "Criminal"
+     ],
+     [
+      "Feel It Still"
+     ],
+     [
+      "God's Plan"
+     ],
+     [
+      "SAD!"
+     ],
+     [
+      "changes"
+     ]
+    ],
+    "ordered": true
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "SG03",
+   "dataset": "songs",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 songs",
+   "prompt": "List the names of the 3 longest songs, longest first. What is the name of the longest song?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "Te Bote - Remix",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT name FROM songs ORDER BY duration_ms DESC LIMIT 3;"
+   },
+   "traps": [
+    {
+     "value": "Everybody Dies In Their Nightmares",
+     "message": "You sorted ascending, which gives the shortest songs."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "name"
+    ],
+    "rows": [
+     [
+      "Te Bote - Remix"
+     ],
+     [
+      "SICKO MODE"
+     ],
+     [
+      "Walk It Talk It"
+     ]
+    ],
+    "ordered": true
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "SG04",
+   "dataset": "songs",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 songs",
+   "prompt": "List the names of songs with danceability, energy and valence all greater than 0.6. How many songs?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 23,
+    "tolerance": 0,
+    "unit": null,
+    "label": "23 rows"
+   },
+   "solution": {
+    "sql": "SELECT name FROM songs WHERE danceability > 0.6 AND energy > 0.6 AND valence > 0.6;"
+   },
+   "traps": [
+    {
+     "value": 91,
+     "message": "All three conditions must hold, so combine them with AND, not OR."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "name"
+    ],
+    "rows": [
+     [
+      "I Like It"
+     ],
+     [
+      "Mine"
+     ],
+     [
+      "New Rules"
+     ],
+     [
+      "Shape of You"
+     ],
+     [
+      "Echame La Culpa"
+     ],
+     [
+      "River (feat. Ed Sheeran)"
+     ],
+     [
+      "Dura"
+     ],
+     [
+      "Me Niego"
+     ],
+     [
+      "Jackie Chan"
+     ],
+     [
+      "Finesse (Remix) [feat. Cardi B]"
+     ],
+     [
+      "Happier"
+     ],
+     [
+      "Believer"
+     ],
+     [
+      "Rise"
+     ],
+     [
+      "Sin Pijama"
+     ],
+     [
+      "2002"
+     ],
+     [
+      "Dejala que vuelva (feat. Manuel Turizo)"
+     ],
+     [
+      "Let Me Go (with Alesso, Florida Georgia Line & watt)"
+     ],
+     [
+      "Feel It Still"
+     ],
+     [
+      "1, 2, 3 (feat. Jason Derulo & De La Ghetto)"
+     ],
+     [
+      "Criminal"
+     ],
+     [
+      "Corazon (feat. Nego do Borel)"
+     ],
+     [
+      "Siguelo Bailando"
+     ],
+     [
+      "Downtown"
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "SG05",
+   "dataset": "songs",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 songs",
+   "prompt": "What is the average tempo of all songs?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 119.90418,
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT AVG(tempo) FROM songs;"
+   },
+   "traps": [],
+   "expected_result": {
+    "columns": [
+     "AVG(tempo)"
+    ],
+    "rows": [
+     [
+      119.90418
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "SG06",
+   "dataset": "songs",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 songs",
+   "prompt": "List the names of songs by Drake (don't assume his artist_id). How many songs?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 4,
+    "tolerance": 0,
+    "unit": null,
+    "label": "4 rows"
+   },
+   "solution": {
+    "sql": "SELECT name FROM songs WHERE artist_id = (SELECT id FROM artists WHERE name = 'Drake');"
+   },
+   "traps": [
+    {
+     "value": 1,
+     "message": "You searched the song titles. The artist is in the artists table: look up Drake's id there (subquery or JOIN)."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "name"
+    ],
+    "rows": [
+     [
+      "God's Plan"
+     ],
+     [
+      "In My Feelings"
+     ],
+     [
+      "Nice For What"
+     ],
+     [
+      "Nonstop"
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "SG07",
+   "dataset": "songs",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 songs",
+   "prompt": "What is the average energy of songs by Post Malone?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 0.608833,
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT AVG(energy) FROM songs WHERE artist_id = (SELECT id FROM artists WHERE name = 'Post Malone');"
+   },
+   "traps": [
+    {
+     "value": 0.65906,
+     "message": "You averaged every song. Filter to Post Malone's artist_id."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "AVG(energy)"
+    ],
+    "rows": [
+     [
+      0.6088333333333333
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "SG08",
+   "dataset": "songs",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 songs",
+   "prompt": "List the names of songs that feature other artists ('feat.' in the name). How many songs?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 18,
+    "tolerance": 0,
+    "unit": null,
+    "label": "18 rows"
+   },
+   "solution": {
+    "sql": "SELECT name FROM songs WHERE name LIKE '%feat.%';"
+   },
+   "traps": [
+    {
+     "value": 0,
+     "message": "'feat.' appears in the middle of the title, so you need a wildcard on both sides: '%feat.%'."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "name"
+    ],
+    "rows": [
+     [
+      "rockstar (feat. 21 Savage)"
+     ],
+     [
+      "Psycho (feat. Ty Dolla $ign)"
+     ],
+     [
+      "Girls Like You (feat. Cardi B)"
+     ],
+     [
+      "Look Alive (feat. Drake)"
+     ],
+     [
+      "These Days (feat. Jess Glynne, Macklemore & Dan Caplen)"
+     ],
+     [
+      "Meant to Be (feat. Florida Georgia Line)"
+     ],
+     [
+      "Taste (feat. Offset)"
+     ],
+     [
+      "Solo (feat. Demi Lovato)"
+     ],
+     [
+      "River (feat. Ed Sheeran)"
+     ],
+     [
+      "Finesse (Remix) [feat. Cardi B]"
+     ],
+     [
+      "Freaky Friday (feat. Chris Brown)"
+     ],
+     [
+      "FEFE (feat. Nicki Minaj & Murda Beatz)"
+     ],
+     [
+      "Body (feat. brando)"
+     ],
+     [
+      "Fuck Love (feat. Trippie Redd)"
+     ],
+     [
+      "Dejala que vuelva (feat. Manuel Turizo)"
+     ],
+     [
+      "1, 2, 3 (feat. Jason Derulo & De La Ghetto)"
+     ],
+     [
+      "Corazon (feat. Nego do Borel)"
+     ],
+     [
+      "I Miss You (feat. Julia Michaels)"
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "MV01",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many movies were released in 2007?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 8214,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM movies WHERE year = 2007;"
+   },
+   "traps": [],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV02",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "What is Johnny Depp's birth year?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 1963,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT birth FROM people WHERE name = 'Johnny Depp';"
+   },
+   "traps": [],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV03",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many movies have a release year of 2017 or later?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 68236,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM movies WHERE year >= 2017;"
+   },
+   "traps": [
+    {
+     "value": 50863,
+     "message": "'On or after 2017' includes 2017: use >=."
+    }
+   ],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV04",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many movies have an IMDb rating greater than 9.0?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 1297,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM ratings WHERE rating > 9.0;"
+   },
+   "traps": [
+    {
+     "value": 1890,
+     "message": "'Greater than 9.0' excludes 9.0 itself."
+    }
+   ],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV05",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many Toy Story movies are there (titles beginning with 'Toy Story')?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 5,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM movies WHERE title LIKE 'Toy Story%';"
+   },
+   "traps": [
+    {
+     "value": 6,
+     "message": "'%Toy Story%' also finds titles that merely contain the phrase. The question says the title begins with it."
+    }
+   ],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV06",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "What is the average rating of movies released in 2012? (round to 2 decimals)",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 6.25,
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT ROUND(AVG(rating),2) FROM ratings JOIN movies ON movies.id = ratings.movie_id WHERE year = 2012;"
+   },
+   "traps": [
+    {
+     "value": 6.15,
+     "message": "You averaged all years. Join to movies and filter on year."
+    }
+   ],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV07",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many movies released in 2010 have a rating?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 6864,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM movies JOIN ratings ON movies.id = ratings.movie_id WHERE year = 2010;"
+   },
+   "traps": [
+    {
+     "value": 11708,
+     "message": "You counted all 2010 movies, including those without a rating. An inner JOIN with ratings keeps only rated movies."
+    }
+   ],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV08",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many people starred in 'Harry Potter and the Sorcerer''s Stone'?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 4,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM stars WHERE movie_id = (SELECT id FROM movies WHERE title = 'Harry Potter and the Sorcerer''s Stone');"
+   },
+   "traps": [],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV09",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many different people starred in a movie released in 2004?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 18251,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(DISTINCT person_id) FROM stars JOIN movies ON movies.id = stars.movie_id WHERE year = 2004;"
+   },
+   "traps": [
+    {
+     "value": 21484,
+     "message": "People who starred in several 2004 movies were counted more than once. Use COUNT(DISTINCT person_id)."
+    }
+   ],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV10",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many different people have directed a movie with a rating of at least 9.0?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 1887,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(DISTINCT d.person_id) FROM directors d JOIN ratings r ON r.movie_id = d.movie_id WHERE r.rating >= 9.0;"
+   },
+   "traps": [
+    {
+     "value": 1282,
+     "message": "'At least 9.0' includes 9.0: use >=."
+    },
+    {
+     "value": 1975,
+     "message": "Directors with several such movies were counted more than once. Use DISTINCT."
+    }
+   ],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV11",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "What is the title of the highest-rated movie Helena Bonham Carter starred in?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "The King's Speech",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT title FROM movies JOIN stars ON stars.movie_id = movies.id JOIN ratings ON ratings.movie_id = movies.id\nWHERE stars.person_id = (SELECT id FROM people WHERE name = 'Helena Bonham Carter') ORDER BY rating DESC LIMIT 1;"
+   },
+   "traps": [],
+   "alternatives": [
+    "Night Will Fall"
+   ],
+   "note": "Two movies tie at 8.0 (The King's Speech and Night Will Fall); both are accepted. LIMIT 1 hides a tie — worth saying in the oral exam.",
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV12",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many movies starred both Johnny Depp and Helena Bonham Carter?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 6,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM (\n  SELECT movie_id FROM stars WHERE person_id = (SELECT id FROM people WHERE name = 'Johnny Depp')\n  INTERSECT\n  SELECT movie_id FROM stars WHERE person_id = (SELECT id FROM people WHERE name = 'Helena Bonham Carter'));"
+   },
+   "traps": [
+    {
+     "value": 100,
+     "message": "You counted movies with EITHER actor. 'Both' needs the intersection of their two movie lists."
+    }
+   ],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "MV13",
+   "dataset": "movies",
+   "subject": "SQL",
+   "case": "SQL Part 1 · CS50 movies",
+   "prompt": "How many different people starred in a movie with Kevin Bacon (born 1958), not counting Kevin Bacon himself?",
+   "topics": [],
+   "answer": {
+    "kind": "number",
+    "value": 176,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(DISTINCT p.id) FROM people p JOIN stars s ON s.person_id = p.id\nWHERE s.movie_id IN (SELECT movie_id FROM stars WHERE person_id = (SELECT id FROM people WHERE name = 'Kevin Bacon' AND birth = 1958))\nAND p.id <> (SELECT id FROM people WHERE name = 'Kevin Bacon' AND birth = 1958);"
+   },
+   "traps": [
+    {
+     "value": 177,
+     "message": "You included Kevin Bacon himself. Exclude his id."
+    },
+    {
+     "value": 180,
+     "message": "There is more than one Kevin Bacon in the database. Use only the one born in 1958."
+    },
+    {
+     "value": 183,
+     "message": "People who appeared with him in several movies were counted several times. Use DISTINCT."
+    }
+   ],
+   "runnable_in_browser": false
+  },
+  {
+   "id": "FV01",
+   "dataset": "fiftyville",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Fiftyville (optional)",
+   "prompt": "Who stole the CS50 duck? (Theft on 28 July 2020, Chamberlin Street.)",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "Ernest",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "WITH lot AS (SELECT license_plate FROM courthouse_security_logs WHERE year=2020 AND month=7 AND day=28 AND hour=10 AND minute BETWEEN 15 AND 25 AND activity='exit'),\natm AS (SELECT b.person_id FROM atm_transactions a JOIN bank_accounts b USING(account_number) WHERE year=2020 AND month=7 AND day=28 AND atm_location='Fifer Street' AND transaction_type='withdraw'),\ncalls AS (SELECT caller, receiver FROM phone_calls WHERE year=2020 AND month=7 AND day=28 AND duration < 60),\nflight AS (SELECT f.id FROM flights f JOIN airports a ON a.id=f.origin_airport_id WHERE a.city='Fiftyville' AND year=2020 AND month=7 AND day=29 ORDER BY hour, minute LIMIT 1)\nSELECT p.name FROM people p\nWHERE p.license_plate IN (SELECT license_plate FROM lot)\nAND p.id IN (SELECT person_id FROM atm)\nAND p.phone_number IN (SELECT caller FROM calls)\nAND p.passport_number IN (SELECT passport_number FROM passengers WHERE flight_id = (SELECT id FROM flight));"
+   },
+   "traps": [
+    {
+     "value": "Danielle",
+     "message": "Danielle passes most checks but did not make a phone call of under a minute that day. Raymond's clue (call < 60 seconds) rules her out."
+    },
+    {
+     "value": "Russell",
+     "message": "Russell fits the car, the ATM and the short call, but he was not on the earliest flight out of Fiftyville on 29 July."
+    }
+   ],
+   "note": "Start at crime_scene_reports, then follow each of the three witness interviews.",
+   "runnable_in_browser": true,
+   "expected_result": {
+    "columns": [
+     "name"
+    ],
+    "rows": [
+     [
+      "Ernest"
+     ]
+    ],
+    "ordered": false
+   }
+  },
+  {
+   "id": "FV02",
+   "dataset": "fiftyville",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Fiftyville (optional)",
+   "prompt": "Which city did the thief escape to?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "London",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT a.city FROM flights f JOIN airports a ON a.id = f.destination_airport_id\nJOIN airports o ON o.id = f.origin_airport_id\nWHERE o.city = 'Fiftyville' AND year = 2020 AND month = 7 AND day = 29 ORDER BY hour, minute LIMIT 1;"
+   },
+   "traps": [
+    {
+     "value": "Fiftyville",
+     "message": "That's where the flight left from. Join the DESTINATION airport to get the escape city."
+    }
+   ],
+   "expected_result": {
+    "columns": [
+     "city"
+    ],
+    "rows": [
+     [
+      "London"
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "FV03",
+   "dataset": "fiftyville",
+   "subject": "SQL",
+   "case": "SQL Part 1 · Fiftyville (optional)",
+   "prompt": "Who is the thief's accomplice?",
+   "topics": [],
+   "answer": {
+    "kind": "text",
+    "value": "Berthold",
+    "tolerance": 0.01,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT r.name FROM phone_calls c JOIN people t ON t.phone_number = c.caller JOIN people r ON r.phone_number = c.receiver\nWHERE t.name = 'Ernest' AND year = 2020 AND month = 7 AND day = 28 AND duration < 60;"
+   },
+   "traps": [],
+   "expected_result": {
+    "columns": [
+     "name"
+    ],
+    "rows": [
+     [
+      "Berthold"
+     ]
+    ],
+    "ordered": false
+   },
+   "runnable_in_browser": true
+  },
+  {
+   "id": "PC01",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "What is the total number of P-card transactions in the database? (TotalTrans)",
+   "topics": [
+    "count",
+    "nulls"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 489178,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) AS TotalTrans FROM pcards;"
+   },
+   "traps": [
+    {
+     "value": 489043,
+     "message": "You counted a column that contains blanks. COUNT(column) skips NULLs, and 135 transactions have no Description. Use COUNT(*) (the case itself warns about this)."
+    },
+    {
+     "value": 473336,
+     "message": "You left out the returns. Returns are transactions too; they are stored as negative amounts."
+    }
+   ]
+  },
+  {
+   "id": "PC02",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "How many P-card transactions are for amounts of $5,000 or more? (TotalTransGT5k)",
+   "topics": [
+    "filter",
+    "count"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 1187,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) AS TotalTransGT5k FROM pcards WHERE Amount >= 5000;"
+   },
+   "traps": [
+    {
+     "value": 1098,
+     "message": "The question says 'more than or equal to $5,000'. You used > instead of >=, which drops transactions of exactly $5,000."
+    },
+    {
+     "value": 1195,
+     "message": "You also counted large returns (negative amounts) by using ABS(). Only charges of $5,000 or more are asked for."
+    }
+   ]
+  },
+  {
+   "id": "PC03",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "What is the total dollar amount of returns from January to March 2014, inclusive? (TotalReturns2014Q1)",
+   "topics": [
+    "filter",
+    "sum",
+    "returns"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": -157882.08,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT ROUND(SUM(Amount),2) AS TotalReturns2014Q1 FROM pcards WHERE Year = 2014 AND Month BETWEEN 1 AND 3 AND Amount < 0;"
+   },
+   "traps": [
+    {
+     "value": 8260485.47,
+     "message": "You summed all transactions in the quarter (purchases minus returns). Returns are the negative amounts: add WHERE Amount < 0."
+    },
+    {
+     "value": -700159.33,
+     "message": "You included January to March of every year in the database, not only 2014."
+    },
+    {
+     "value": -100928.82,
+     "message": "'January to March, inclusive' includes March. Use Month BETWEEN 1 AND 3 (or <= 3)."
+    },
+    {
+     "value": 157882.08,
+     "message": "Right amount, wrong sign. Returns are stored as negative numbers, so the total of returns is negative. Saying 'returns of $X' in words is fine; the query result is negative."
+    }
+   ]
+  },
+  {
+   "id": "PC04",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "How many P-card transactions took place in the 2013 calendar year (by TransactionDate)?",
+   "topics": [
+    "dates",
+    "count"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 116595,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) AS TotalTrans FROM pcards WHERE Year = 2013;"
+   },
+   "traps": [
+    {
+     "value": 116565,
+     "message": "You used PostedDate. The case says to use TransactionDate for all date questions unless stated otherwise."
+    },
+    {
+     "value": 149274,
+     "message": "TransactionDate is stored as TEXT ('7/26/2014 0:00:00'), so BETWEEN compares letters, not dates. Use the Year column or convert the text to a real date first."
+    }
+   ]
+  },
+  {
+   "id": "PC05",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Which cardholder had the most transactions in 2014? Enter the number of transactions (NumTrans).",
+   "topics": [
+    "group by",
+    "ranking"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 3510,
+    "tolerance": 0,
+    "unit": null,
+    "label": "G Hines with 3510 transactions"
+   },
+   "solution": {
+    "sql": "SELECT CardholderFirstInitial||' '||CardholderLastName AS Name, COUNT(*) AS NumTrans FROM pcards WHERE Year = 2014 GROUP BY Name ORDER BY NumTrans DESC LIMIT 1;",
+    "expected_row": [
+     "G Hines",
+     3510
+    ]
+   },
+   "traps": [
+    {
+     "value": 3634,
+     "message": "You grouped by last name only, so different people with the same surname were merged (top: Hines). The case says a person is the combination of first initial AND last name."
+    },
+    {
+     "value": 6316,
+     "message": "You counted every year in the database. Restrict to 2014."
+    }
+   ]
+  },
+  {
+   "id": "PC06",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Who returned the greatest dollar amount of goods in 2014? Enter that total returned amount (ReturnedGoodsValue).",
+   "topics": [
+    "group by",
+    "returns",
+    "sorting negatives"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": -21898.28,
+    "tolerance": 0.01,
+    "unit": null,
+    "label": "J Heusel: -21898.28 over 126 returns"
+   },
+   "solution": {
+    "sql": "SELECT CardholderFirstInitial||' '||CardholderLastName AS Name, ROUND(SUM(Amount),2) AS ReturnedGoodsValue, COUNT(*) AS ReturnedGoodsCount FROM pcards WHERE Year = 2014 AND Amount < 0 GROUP BY Name ORDER BY ReturnedGoodsValue ASC LIMIT 1;",
+    "expected_row": [
+     "J Heusel",
+     -21898.28,
+     126
+    ]
+   },
+   "traps": [
+    {
+     "value": -0.01,
+     "message": "You sorted descending. Returns are negative, so the LARGEST return is the most negative number: sort ascending (or sort by ABS)."
+    },
+    {
+     "value": 21898.28,
+     "message": "Right person and amount, but the sign is flipped. Returns are negative in this data."
+    }
+   ]
+  },
+  {
+   "id": "PC07",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "How many cardholders had more than 10 transactions in 2014?",
+   "topics": [
+    "having"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 1515,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM (SELECT CardholderFirstInitial||' '||CardholderLastName AS Name FROM pcards WHERE Year = 2014 GROUP BY Name HAVING COUNT(*) > 10);"
+   },
+   "traps": [
+    {
+     "value": 1541,
+     "message": "'More than 10' means 11 or more. You used >= 10."
+    },
+    {
+     "value": 1266,
+     "message": "You grouped by last name only, merging different people. Use first initial + last name."
+    },
+    {
+     "value": 3884,
+     "message": "You used all years. Restrict to 2014 BEFORE grouping (WHERE), then filter groups with HAVING."
+    }
+   ]
+  },
+  {
+   "id": "PC08",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Assume all purchases are net of the 4.5% state sales tax. How much sales tax did OSU avoid on P-card transactions in 2014? (SalesTaxSaved)",
+   "topics": [
+    "calculated field"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 1507686.68,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT ROUND(SUM(Amount)*0.045,2) AS SalesTaxSaved FROM pcards WHERE Year = 2014;"
+   },
+   "traps": [
+    {
+     "value": 1536011.71,
+     "message": "You excluded returns. Returned goods were never really bought, so no tax was saved on them: use the net total including the negative amounts."
+    },
+    {
+     "value": 15076866.75,
+     "message": "4.5% is 0.045, not 0.45."
+    },
+    {
+     "value": 1055380.67,
+     "message": "That is the 70% version (OSU pays tax in other states 30% of the time). This question asks for 100%."
+    }
+   ]
+  },
+  {
+   "id": "PC09",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "OSU would earn 0.75% on Amazon.com transactions of $500 and more and 0.50% on those under $500. What would OSU have earned in 2014? (AmazonEarnings)",
+   "topics": [
+    "case when",
+    "text matching"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 2593.74,
+    "tolerance": 0.01,
+    "unit": "USD",
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT ROUND(SUM(CASE WHEN Amount >= 500 THEN Amount*0.0075 ELSE Amount*0.005 END),2) AS AmazonEarnings FROM pcards WHERE Year = 2014 AND LOWER(Vendor) = 'amazon.com';"
+   },
+   "traps": [
+    {
+     "value": 2583.19,
+     "message": "In SQLite, = is case-sensitive, so 'AMAZON.COM' (28 transactions) was left out. The case was written for Access, where comparisons ignore case. Use LOWER(Vendor) = 'amazon.com'."
+    },
+    {
+     "value": 5215.06,
+     "message": "LIKE '%amazon%' also catches Marketplace, Kindle, Prime, Amazon Web Services and claim adjustments. The question is about the vendor Amazon.com only."
+    },
+    {
+     "value": 2632.8,
+     "message": "You dropped Amazon returns. Commission is clawed back when goods are returned, so returns reduce earnings."
+    }
+   ]
+  },
+  {
+   "id": "PC10",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "How many 2014 transactions are greater than the average transaction amount for 2014?",
+   "topics": [
+    "subquery"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 29640,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM pcards WHERE Year = 2014 AND Amount > (SELECT AVG(Amount) FROM pcards WHERE Year = 2014);"
+   },
+   "traps": [
+    {
+     "value": 25900,
+     "message": "Your subquery averaged ALL years. The benchmark must be the 2014 average, so the subquery also needs WHERE Year = 2014."
+    },
+    {
+     "value": 28148,
+     "message": "Your average excluded returns, which raises the benchmark. The average transaction includes returns."
+    }
+   ]
+  },
+  {
+   "id": "PC11",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Control: a user shall not spend more than $50,000 per year. How many cardholders spent more than $50,000 in 2014?",
+   "topics": [
+    "internal control",
+    "having"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 127,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM (SELECT CardholderFirstInitial||' '||CardholderLastName AS Name, SUM(Amount) AS Total FROM pcards WHERE Year = 2014 GROUP BY Name HAVING Total > 50000);"
+   },
+   "traps": [
+    {
+     "value": 130,
+     "message": "You ignored returns. Spending against a limit is net of credits; gross charges overstate violations."
+    },
+    {
+     "value": 141,
+     "message": "You grouped by last name only. Several people share a surname, so their spending was added together, creating false violations."
+    }
+   ]
+  },
+  {
+   "id": "PC12",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Control: no more than $10,000 per month without approval. How many cardholder-months in 2014 exceeded $10,000?",
+   "topics": [
+    "internal control",
+    "group by two fields"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 457,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM (SELECT CardholderFirstInitial||' '||CardholderLastName AS Name, Month, SUM(Amount) AS Total FROM pcards WHERE Year = 2014 GROUP BY Name, Month HAVING Total > 10000);"
+   },
+   "traps": [
+    {
+     "value": 161,
+     "message": "You counted people, not person-months. The test is per month, so someone over the limit in 3 months counts 3 times."
+    },
+    {
+     "value": 464,
+     "message": "You ignored returns, which overstates monthly spending."
+    }
+   ]
+  },
+  {
+   "id": "PC13",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Control: no single transaction above $5,000. How many 2014 transactions were for more than $5,000?",
+   "topics": [
+    "internal control",
+    "filter"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 33,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM pcards WHERE Year = 2014 AND Amount > 5000;"
+   },
+   "traps": [
+    {
+     "value": 53,
+     "message": "The limit is 'more than $5,000'. A transaction of exactly $5,000 is within the limit, so it is not a violation."
+    },
+    {
+     "value": 1098,
+     "message": "You tested every year. The audit covers 2014."
+    }
+   ]
+  },
+  {
+   "id": "PC14",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Control: a purchase over $5,000 must not be split between several swipes by the same person. How many 2014 transactions are flagged (same person, same vendor, same day, more than one transaction, combined total over $5,000)?",
+   "topics": [
+    "internal control",
+    "split purchases",
+    "join back"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 254,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM pcards p JOIN (\n  SELECT CardholderFirstInitial, CardholderLastName, Vendor, TransactionDate\n  FROM pcards WHERE Year = 2014\n  GROUP BY CardholderFirstInitial, CardholderLastName, Vendor, TransactionDate\n  HAVING COUNT(*) > 1 AND SUM(Amount) > 5000) g\n ON p.CardholderFirstInitial = g.CardholderFirstInitial AND p.CardholderLastName = g.CardholderLastName\n AND p.Vendor = g.Vendor AND p.TransactionDate = g.TransactionDate;"
+   },
+   "traps": [
+    {
+     "value": 66,
+     "message": "You counted the groups (person-vendor-days), but the test asks you to display all transaction details, i.e. every transaction in those groups. Join the groups back to the transactions."
+    },
+    {
+     "value": 285,
+     "message": "You forgot 'more than one transaction for the day'. A single $6,000 swipe is a limit breach (control 3), not a split purchase."
+    },
+    {
+     "value": 6394,
+     "message": "You did not require the same vendor. Buying from two different shops on one day is a different test (control 6)."
+    }
+   ]
+  },
+  {
+   "id": "PC15",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Benford's law: among 2014 transactions of $1.00 or more, what percentage start with the digit 1? (round to three decimals)",
+   "topics": [
+    "forensics",
+    "benford"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 29.528,
+    "tolerance": 0.001,
+    "unit": "%",
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT ROUND(100.0*SUM(substr(CAST(Amount AS TEXT),1,1)='1')/COUNT(*),3) AS PctDigit1\nFROM pcards WHERE Year = 2014 AND Amount >= 1;"
+   },
+   "traps": [
+    {
+     "value": 29.571,
+     "message": "You included returns by taking the absolute value. The case says to exclude all numbers less than 1.00, and negative numbers are less than 1."
+    },
+    {
+     "value": 29.502,
+     "message": "You excluded negatives but kept amounts between $0 and $0.99, whose first character is '0'. Use Amount >= 1."
+    },
+    {
+     "value": 29.498,
+     "message": "You used every year; the forensic test covers 2014."
+    }
+   ],
+   "note": "Benford expects 30.103% for digit 1."
+  },
+  {
+   "id": "PC16",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Duplicate payments: same day, same vendor, same cardholder, same amount (returns excluded). How many 2014 transactions are possible duplicates?",
+   "topics": [
+    "forensics",
+    "duplicates"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 4924,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM pcards p JOIN (\n  SELECT TransactionDate, Vendor, CardholderFirstInitial, CardholderLastName, Amount\n  FROM pcards WHERE Year = 2014 AND Amount > 0\n  GROUP BY TransactionDate, Vendor, CardholderFirstInitial, CardholderLastName, Amount\n  HAVING COUNT(*) > 1) d\n USING (TransactionDate, Vendor, CardholderFirstInitial, CardholderLastName, Amount)\nWHERE p.Year = 2014;"
+   },
+   "traps": [
+    {
+     "value": 1732,
+     "message": "You counted duplicate GROUPS. The case says that when there are more than two charges, all of them are possible duplicates, so list every transaction in each group."
+    },
+    {
+     "value": 5210,
+     "message": "You did not exclude returns. A purchase and a matching refund are not duplicates, and two identical refunds are not payments."
+    },
+    {
+     "value": 3192,
+     "message": "You counted only the 'extra' copies. The case asks for all possible duplicate payments for follow-up, including the first one."
+    }
+   ]
+  },
+  {
+   "id": "PC17",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "Round-number test: how many 2014 transactions have a four-digit dollar amount ending in 000 (no cents)?",
+   "topics": [
+    "forensics",
+    "round numbers"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 149,
+    "tolerance": 0,
+    "unit": null,
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT COUNT(*) FROM pcards WHERE Year = 2014 AND Amount BETWEEN 1000 AND 9999 AND Amount = CAST(Amount AS INTEGER) AND CAST(Amount AS INTEGER) % 1000 = 0;"
+   },
+   "traps": [
+    {
+     "value": 151,
+     "message": "You did not limit to four digits, so $10,000+ amounts and $0 adjustments were included."
+    }
+   ]
+  },
+  {
+   "id": "PC18",
+   "dataset": "pcards",
+   "subject": "SQL",
+   "case": "SQL Part 2 · OSU P-cards",
+   "prompt": "For November 2014 transactions, what is the largest number of days between TransactionDate and PostedDate (TimeDif)?",
+   "topics": [
+    "dates",
+    "date arithmetic"
+   ],
+   "answer": {
+    "kind": "number",
+    "value": 33.0,
+    "tolerance": 0,
+    "unit": "days",
+    "label": null
+   },
+   "solution": {
+    "sql": "SELECT MAX(julianday(printf('%04d-%02d-%02d', cast(substr(substr(PostedDate, instr(PostedDate,'/')+1), instr(substr(PostedDate, instr(PostedDate,'/')+1),'/')+1) as int), cast(PostedDate as int), cast(substr(PostedDate, instr(PostedDate,'/')+1) as int))) - julianday(printf('%04d-%02d-%02d', cast(substr(substr(TransactionDate, instr(TransactionDate,'/')+1), instr(substr(TransactionDate, instr(TransactionDate,'/')+1),'/')+1) as int), cast(TransactionDate as int), cast(substr(TransactionDate, instr(TransactionDate,'/')+1) as int)))) FROM pcards WHERE Year = 2014 AND Month = 11;"
+   },
+   "traps": [
+    {
+     "value": 1,
+     "message": "You subtracted the text dates directly. '11/28/2014' - '12/2/2014' only compares the leading month numbers. Convert the text to a date first (e.g. julianday on an ISO date)."
+    },
+    {
+     "value": 0.0,
+     "message": "You subtracted in the wrong order. The case says TimeDif is positive when PostedDate is after TransactionDate: PostedDate - TransactionDate."
+    }
+   ]
+  }
+ ]
+}

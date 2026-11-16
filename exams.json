@@ -1,0 +1,902 @@
+[
+ {
+  "id": "X01",
+  "datasets": [
+   "etl2",
+   "pcards"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "PC11",
+   "PC17"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X02",
+  "datasets": [
+   "etl3",
+   "pcards"
+  ],
+  "questions": [
+   "E301",
+   "E302",
+   "E303",
+   "PC07",
+   "PC17"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X03",
+  "datasets": [
+   "film",
+   "pcards"
+  ],
+  "questions": [
+   "FP01",
+   "FP15",
+   "FP18",
+   "PC03",
+   "PC07"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X04",
+  "datasets": [
+   "etl1",
+   "pcards"
+  ],
+  "questions": [
+   "E102",
+   "E106",
+   "E107",
+   "PC08",
+   "PC18"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X05",
+  "datasets": [
+   "etl1",
+   "pcards"
+  ],
+  "questions": [
+   "E102",
+   "E105",
+   "E107",
+   "PC04",
+   "PC09"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X06",
+  "datasets": [
+   "payroll",
+   "pcards"
+  ],
+  "questions": [
+   "IC02",
+   "IC08",
+   "IC13",
+   "PC09",
+   "PC17"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X07",
+  "datasets": [
+   "etl2",
+   "chinook"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "CH03",
+   "CH14"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X08",
+  "datasets": [
+   "etl4",
+   "movies"
+  ],
+  "questions": [
+   "E401",
+   "E402",
+   "E403",
+   "MV01",
+   "MV09"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X09",
+  "datasets": [
+   "etl1",
+   "movies"
+  ],
+  "questions": [
+   "E103",
+   "E105",
+   "E106",
+   "MV08",
+   "MV10"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X10",
+  "datasets": [
+   "etl1",
+   "songs"
+  ],
+  "questions": [
+   "E103",
+   "E104",
+   "E106",
+   "SG06",
+   "SG07"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X11",
+  "datasets": [
+   "film",
+   "movies"
+  ],
+  "questions": [
+   "FP04",
+   "FP17",
+   "FP19",
+   "MV05",
+   "MV13"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X12",
+  "datasets": [
+   "payroll",
+   "songs"
+  ],
+  "questions": [
+   "IC03",
+   "IC11",
+   "IC14",
+   "SG03",
+   "SG07"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X13",
+  "datasets": [
+   "etl1",
+   "chinook"
+  ],
+  "questions": [
+   "E101",
+   "E102",
+   "E105",
+   "CH02",
+   "CH18"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X14",
+  "datasets": [
+   "payroll",
+   "movies"
+  ],
+  "questions": [
+   "IC07",
+   "IC09",
+   "IC14",
+   "MV02",
+   "MV07"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X15",
+  "datasets": [
+   "etl2",
+   "movies"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "MV04",
+   "MV09"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X16",
+  "datasets": [
+   "etl4",
+   "songs"
+  ],
+  "questions": [
+   "E401",
+   "E404",
+   "E405",
+   "SG04",
+   "SG06"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X17",
+  "datasets": [
+   "etl2",
+   "movies"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "MV01",
+   "MV11"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X18",
+  "datasets": [
+   "etl2",
+   "songs"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "SG04",
+   "SG06"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X19",
+  "datasets": [
+   "etl3",
+   "chinook"
+  ],
+  "questions": [
+   "E301",
+   "E302",
+   "E303",
+   "CH16",
+   "CH19"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X20",
+  "datasets": [
+   "etl2",
+   "chinook"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "CH19",
+   "CH21"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X21",
+  "datasets": [
+   "payroll",
+   "pcards"
+  ],
+  "questions": [
+   "IC03",
+   "IC05",
+   "IC06",
+   "PC06",
+   "PC09"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X22",
+  "datasets": [
+   "etl2",
+   "pcards"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "PC16",
+   "PC17"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X23",
+  "datasets": [
+   "film",
+   "chinook"
+  ],
+  "questions": [
+   "FP06",
+   "FP14",
+   "FP15",
+   "CH03",
+   "CH16"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X24",
+  "datasets": [
+   "payroll",
+   "chinook"
+  ],
+  "questions": [
+   "IC04",
+   "IC09",
+   "IC11",
+   "CH05",
+   "CH17"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X25",
+  "datasets": [
+   "payroll",
+   "songs"
+  ],
+  "questions": [
+   "IC08",
+   "IC09",
+   "IC13",
+   "SG05",
+   "SG07"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X26",
+  "datasets": [
+   "etl3",
+   "songs"
+  ],
+  "questions": [
+   "E301",
+   "E302",
+   "E303",
+   "SG03",
+   "SG07"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X27",
+  "datasets": [
+   "etl3",
+   "movies"
+  ],
+  "questions": [
+   "E301",
+   "E302",
+   "E303",
+   "MV03",
+   "MV08"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X28",
+  "datasets": [
+   "etl2",
+   "songs"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "SG05",
+   "SG08"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X29",
+  "datasets": [
+   "etl3",
+   "movies"
+  ],
+  "questions": [
+   "E301",
+   "E302",
+   "E303",
+   "MV08",
+   "MV10"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X30",
+  "datasets": [
+   "etl4",
+   "chinook"
+  ],
+  "questions": [
+   "E402",
+   "E403",
+   "E404",
+   "CH08",
+   "CH20"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X31",
+  "datasets": [
+   "etl2",
+   "songs"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "SG01",
+   "SG05"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X32",
+  "datasets": [
+   "film",
+   "songs"
+  ],
+  "questions": [
+   "FP09",
+   "FP12",
+   "FP16",
+   "SG02",
+   "SG08"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X33",
+  "datasets": [
+   "film",
+   "movies"
+  ],
+  "questions": [
+   "FP08",
+   "FP15",
+   "FP19",
+   "MV01",
+   "MV10"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X34",
+  "datasets": [
+   "etl1",
+   "songs"
+  ],
+  "questions": [
+   "E103",
+   "E106",
+   "E107",
+   "SG01",
+   "SG03"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X35",
+  "datasets": [
+   "etl1",
+   "movies"
+  ],
+  "questions": [
+   "E102",
+   "E103",
+   "E107",
+   "MV09",
+   "MV11"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X36",
+  "datasets": [
+   "payroll",
+   "movies"
+  ],
+  "questions": [
+   "IC01",
+   "IC05",
+   "IC11",
+   "MV06",
+   "MV08"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X37",
+  "datasets": [
+   "etl3",
+   "chinook"
+  ],
+  "questions": [
+   "E301",
+   "E302",
+   "E303",
+   "CH01",
+   "CH21"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X38",
+  "datasets": [
+   "etl2",
+   "pcards"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "PC03",
+   "PC13"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X39",
+  "datasets": [
+   "etl4",
+   "pcards"
+  ],
+  "questions": [
+   "E402",
+   "E404",
+   "E405",
+   "PC01",
+   "PC05"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X40",
+  "datasets": [
+   "etl1",
+   "pcards"
+  ],
+  "questions": [
+   "E101",
+   "E103",
+   "E106",
+   "PC10",
+   "PC18"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X41",
+  "datasets": [
+   "etl4",
+   "pcards"
+  ],
+  "questions": [
+   "E403",
+   "E404",
+   "E405",
+   "PC12",
+   "PC16"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X42",
+  "datasets": [
+   "film",
+   "songs"
+  ],
+  "questions": [
+   "FP08",
+   "FP14",
+   "FP18",
+   "SG07",
+   "SG08"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X43",
+  "datasets": [
+   "etl3",
+   "pcards"
+  ],
+  "questions": [
+   "E301",
+   "E302",
+   "E303",
+   "PC15",
+   "PC16"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X44",
+  "datasets": [
+   "etl1",
+   "movies"
+  ],
+  "questions": [
+   "E104",
+   "E105",
+   "E106",
+   "MV02",
+   "MV11"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X45",
+  "datasets": [
+   "film",
+   "pcards"
+  ],
+  "questions": [
+   "FP03",
+   "FP04",
+   "FP10",
+   "PC04",
+   "PC15"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X46",
+  "datasets": [
+   "film",
+   "songs"
+  ],
+  "questions": [
+   "FP06",
+   "FP11",
+   "FP17",
+   "SG04",
+   "SG08"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X47",
+  "datasets": [
+   "film",
+   "chinook"
+  ],
+  "questions": [
+   "FP14",
+   "FP15",
+   "FP16",
+   "CH10",
+   "CH15"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X48",
+  "datasets": [
+   "film",
+   "pcards"
+  ],
+  "questions": [
+   "FP04",
+   "FP07",
+   "FP08",
+   "PC01",
+   "PC03"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X49",
+  "datasets": [
+   "film",
+   "movies"
+  ],
+  "questions": [
+   "FP05",
+   "FP14",
+   "FP15",
+   "MV01",
+   "MV02"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X50",
+  "datasets": [
+   "film",
+   "chinook"
+  ],
+  "questions": [
+   "FP04",
+   "FP11",
+   "FP17",
+   "CH04",
+   "CH17"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X51",
+  "datasets": [
+   "etl2",
+   "chinook"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "CH09",
+   "CH19"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X52",
+  "datasets": [
+   "etl1",
+   "chinook"
+  ],
+  "questions": [
+   "E103",
+   "E104",
+   "E106",
+   "CH14",
+   "CH18"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X53",
+  "datasets": [
+   "etl4",
+   "chinook"
+  ],
+  "questions": [
+   "E403",
+   "E404",
+   "E405",
+   "CH10",
+   "CH13"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X54",
+  "datasets": [
+   "etl2",
+   "movies"
+  ],
+  "questions": [
+   "E201",
+   "E202",
+   "E203",
+   "MV09",
+   "MV10"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X55",
+  "datasets": [
+   "payroll",
+   "chinook"
+  ],
+  "questions": [
+   "IC04",
+   "IC05",
+   "IC12",
+   "CH15",
+   "CH16"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X56",
+  "datasets": [
+   "etl4",
+   "movies"
+  ],
+  "questions": [
+   "E401",
+   "E403",
+   "E405",
+   "MV01",
+   "MV03"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X57",
+  "datasets": [
+   "etl1",
+   "chinook"
+  ],
+  "questions": [
+   "E101",
+   "E104",
+   "E106",
+   "CH07",
+   "CH11"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X58",
+  "datasets": [
+   "etl1",
+   "songs"
+  ],
+  "questions": [
+   "E102",
+   "E106",
+   "E107",
+   "SG01",
+   "SG03"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X59",
+  "datasets": [
+   "etl3",
+   "songs"
+  ],
+  "questions": [
+   "E301",
+   "E302",
+   "E303",
+   "SG04",
+   "SG05"
+  ],
+  "minutes": 8
+ },
+ {
+  "id": "X60",
+  "datasets": [
+   "etl4",
+   "songs"
+  ],
+  "questions": [
+   "E402",
+   "E404",
+   "E405",
+   "SG02",
+   "SG07"
+  ],
+  "minutes": 8
+ }
+]
