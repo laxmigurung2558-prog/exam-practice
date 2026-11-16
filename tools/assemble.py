@@ -5,6 +5,7 @@ W = "/home/claude/work/"
 BASE = "/home/claude/mat/"
 parts = ["out_film.json", "out_etl.json", "out_ic.json", "out_sql1.json", "out_pcards.json"]
 qs = [q for p in parts for q in json.load(open(W + p))]
+qs += json.load(open(W + "out_interp.json"))["questions"]
 
 datasets = {
     "film":       {"title": "NYC film permits", "files": ["NYC_Film_Permits.txt"], "subject": "Excel"},
@@ -13,6 +14,7 @@ datasets = {
     "etl3":       {"title": "Messy employee codes (ETL case 3)", "files": ["Analytics_mindset_case_studies_ETL_Case3_Excel.xlsx"], "subject": "Excel"},
     "etl4":       {"title": "Journal entries (ETL case 4)", "files": ["Analytics_mindset_case_studies_ETL_Case4_Excel.xlsx"], "subject": "Excel"},
     "payroll":    {"title": "IntegrateCo payroll", "files": ["Analytics_mindset_case_studies_IntegrateCo_2015payroll.csv", "Analytics_mindset_case_studies_IntegrateCo_2016payroll.csv", "Analytics_mindset_case_studies_IntegrateCo_jobcodes.csv", "Analytics_mindset_case_studies_IntegrateCo_locations.csv"], "subject": "Excel"},
+    "restaurant": {"title": "Restaurant sales (regression case)", "files": ["data.xlsm"], "subject": "Interpretation"},
     "chinook":    {"title": "Chinook music store", "files": ["Chinook_Sqlite.sqlite"], "subject": "SQL", "browser_sql": True},
     "songs":      {"title": "CS50 songs", "files": ["songs.db"], "subject": "SQL", "browser_sql": True},
     "fiftyville": {"title": "Fiftyville mystery", "files": ["fiftyville.db"], "subject": "SQL", "browser_sql": True},

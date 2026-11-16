@@ -127,13 +127,13 @@ SELECT COUNT(*) FROM per JOIN alb USING(AlbumId) WHERE n = total""",
 add("CH20", "chinook", "What is the most popular genre (by tracks sold)?",
     """SELECT g.Name FROM InvoiceLine il JOIN Track t ON t.TrackId = il.TrackId JOIN Genre g ON g.GenreId = t.GenreId
 GROUP BY g.Name ORDER BY SUM(il.Quantity) DESC LIMIT 1;""")
-add("CH21", "chinook", "Show customer names (first and last), invoice IDs and totals for invoices billed to the United Kingdom. How many rows?",
-    """SELECT c.FirstName, c.LastName, i.InvoiceId, i.Total FROM Invoice i JOIN Customer c ON c.CustomerId = i.CustomerId
-WHERE i.BillingCountry = 'United Kingdom';""",
-    [("SELECT * FROM Invoice WHERE BillingCountry = 'UK'",
-      "The data spells it 'United Kingdom'. Check the values first with SELECT DISTINCT BillingCountry."),
-     ("SELECT c.FirstName FROM Invoice i, Customer c WHERE i.BillingCountry='United Kingdom'",
-      "You listed both tables without a join condition (a cross join), so every invoice was paired with every customer. Join ON CustomerId.")],
+add("CH21", "chinook", "List every invoice billed to Germany with the customer's full name, the invoice date and the invoice total. How many invoices are there?",
+    """SELECT c.FirstName || ' ' || c.LastName AS Customer, i.InvoiceDate, i.Total FROM Invoice i JOIN Customer c ON c.CustomerId = i.CustomerId
+WHERE i.BillingCountry = 'Germany' ORDER BY i.InvoiceDate;""",
+    [("SELECT 1 FROM Invoice i, Customer c WHERE i.BillingCountry = 'Germany'",
+      "You listed both tables without a join condition (a cross join), so every invoice was paired with every customer. Join ON CustomerId."),
+     ("SELECT 1 FROM Invoice WHERE BillingCountry = 'Deutschland'",
+      "The data spells it 'Germany'. Check the values first with SELECT DISTINCT BillingCountry.")],
     tol=0)
 
 # ---------------------------------------------------------------- songs

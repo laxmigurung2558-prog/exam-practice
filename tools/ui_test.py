@@ -13,6 +13,8 @@ class Quiet(http.server.SimpleHTTPRequestHandler):
 srv = http.server.ThreadingHTTPServer(("127.0.0.1", 8765), functools.partial(Quiet, directory=SITE))
 threading.Thread(target=srv.serve_forever, daemon=True).start()
 BASE = "http://127.0.0.1:8765/"
+EX = next(x for x in json.load(open(SITE + "/exams.json")) if x["questions"][:2] == ["E201", "E202"])["id"]
+print("using exam", EX)
 
 SHIM = """
 window.initSqlJs = function(){ return Promise.resolve({ Database: function(bytes){
@@ -47,15 +49,16 @@ with sync_playwright() as p:
     pg.route("**/__sql", sql_route)
 
     pg.goto(BASE); pg.wait_for_selector("h1")
-    ok("home loads", "Practise the exam" in pg.inner_text("h1"))
-    ok("home stats", "115" in pg.inner_text("main") and "144" in pg.inner_text("main"))
+    ok("home loads", "Oral exam practice" in pg.inner_text("h1"))
+    ok("home stats", "131" in pg.inner_text("main") and "179" in pg.inner_text("main"))
+    ok("home has both parts", "Data Manipulation Exams (60)" in pg.inner_text("main") and "Data Interpretation Exams (12)" in pg.inner_text("main"))
     pg.screenshot(path=f"{OUT}/1_home.png", full_page=True)
 
     pg.goto(BASE + "#/exams"); pg.wait_for_selector(".exam-card")
-    ok("60 exams listed", pg.locator(".exam-card").count() == 60)
+    ok("60 manipulation exams listed", pg.locator(".exam-card").count() == 60)
 
     # exam X01: etl2 + pcards
-    pg.goto(BASE + "#/exam/X01"); pg.wait_for_selector(".qpanel")
+    pg.goto(BASE + "#/exam/" + EX); pg.wait_for_selector(".qpanel")
     ok("exam shows 2 dataset blocks", pg.locator(".downloads").count() == 2)
     pg.click("text=Start timer"); pg.wait_for_timeout(2200)
     clk = pg.inner_text(".clock"); ok("timer counts down", clk in ("7:58", "7:57", "7:59"), clk)
@@ -64,7 +67,7 @@ with sync_playwright() as p:
     pg.fill("input[aria-label='Your answer']", "133"); pg.click("text=Check my answer")
     ok("E201 correct", "correct" in pg.inner_text(".feedback").lower())
     ok("sidebar dot turns green", pg.locator(".side .dot.correct").count() == 1)
-    pg.goto(BASE + "#/exam/X01/2"); pg.wait_for_selector(".qpanel")
+    pg.goto(BASE + "#/exam/" + EX + "/2"); pg.wait_for_selector(".qpanel")
     pg.fill("input[aria-label='Your answer']", "24"); pg.click("text=Check my answer")
     ok("E202 plant without country -> known mistake", "known mistake" in pg.inner_text(".feedback").lower(), pg.inner_text(".feedback")[:120])
     ok("solution link appears after attempt", pg.locator("text=Show model solution").is_visible())
@@ -72,7 +75,7 @@ with sync_playwright() as p:
     pg.click("text=Show model solution")
     ok("solution shows answer", "ARG-15" in pg.inner_text(".solution"))
     pg.screenshot(path=f"{OUT}/2_exam_trap.png", full_page=True)
-    pg.goto(BASE + "#/report/X01"); pg.wait_for_selector(".kpi")
+    pg.goto(BASE + "#/report/" + EX); pg.wait_for_selector(".kpi")
     ok("report counts 1 correct", "1 / 5" in pg.inner_text(".kpi"))
     ok("report lists the mistake", "PlantID without its country" in pg.inner_text("main"))
     pg.screenshot(path=f"{OUT}/3_report.png", full_page=True)
@@ -101,15 +104,31 @@ with sync_playwright() as p:
         return pg.inner_text(".qpanel").lower()
     t = run("CH08", "SELECT COUNT(*) FROM Invoice WHERE BillingCountry LIKE '%C%'"); ok("SQL trap diagnosed", "known mistake" in t)
     t = run("CH08", "SELECT COUNT(*) FROM Invoice WHERE BillingCountry LIKE 'C%'"); ok("SQL correct", "correct" in t)
-    t = run("CH21", "SELECT c.FirstName, c.LastName, i.InvoiceId, i.Total FROM Invoice i JOIN Customer c ON c.CustomerId=i.CustomerId WHERE i.BillingCountry='United Kingdom'")
-    ok("SQL multi-row correct + table shown", "correct" in t and pg.locator(".result tr").count() == 22)
+    t = run("CH21", "SELECT c.FirstName || ' ' || c.LastName, i.InvoiceDate, i.Total FROM Invoice i JOIN Customer c ON c.CustomerId=i.CustomerId WHERE i.BillingCountry='Germany'")
+    ok("SQL multi-row correct + table shown", "correct" in t and pg.locator(".result tr").count() == 29)
     pg.screenshot(path=f"{OUT}/5_sql.png", full_page=True)
     t = run("SG02", "SELECT name FROM songs ORDER BY tempo"); ok("SQL wrong order hint", "sort order" in t)
     t = run("CH01", "SELEC nonsense"); ok("SQL error shown", pg.locator(".error").count() == 1)
 
+    # data interpretation
+    pg.goto(BASE + "#/interpretation/exams"); pg.wait_for_selector(".exam-card")
+    ok("12 interpretation exams", pg.locator(".exam-card").count() == 12)
+    pg.goto(BASE + "#/exam/R01"); pg.wait_for_selector(".qpanel")
+    ok("interp exam has 4 questions", pg.locator(".side button").count() == 4)
+    ok("model table shown", pg.locator(".model table tr").count() >= 3)
+    pg.goto(BASE + "#/exam/R01/4"); pg.wait_for_selector(".qpanel"); ok("4th question reachable", pg.locator(".qpanel").count() == 1)
+    pg.screenshot(path=f"{OUT}/8_interp.png", full_page=True)
+    f = answer("RI01", "2910,33"); ok("RI01 prediction correct", "correct" in f)
+    f = answer("RI01", "2194.17"); ok("RI01 forgot intercept", "intercept" in f)
+    f = answer("RI07", "2987.86"); ok("RI07 Celsius trap", "°f" in f or "77" in f)
+    f = answer("RI09", "yes"); ok("RI09 significance trap", "model 5" in f)
+    f = answer("RI09", "not significant"); ok("RI09 words accepted", "correct" in f)
+    f = answer("RI16", "0.547"); ok("RI16 share accepted as %", "correct" in f)
+    pg.goto(BASE + "#/interpretation/questions"); pg.wait_for_selector(".qrow"); ok("interp bank 16", pg.locator(".qrow").count() == 16)
+
     # bank filters + progress badges
-    pg.goto(BASE + "#/questions"); pg.wait_for_selector(".qrow")
-    ok("bank shows 115", pg.locator(".qrow").count() == 115)
+    pg.goto(BASE + "#/manipulation/questions"); pg.wait_for_selector(".qrow")
+    ok("manipulation bank shows 115", pg.locator(".qrow").count() == 115)
     pg.select_option("select[aria-label='Dataset']", "pcards")
     ok("filter by dataset", pg.locator(".qrow").count() == 18)
     pg.select_option("select[aria-label='Dataset']", ""); pg.select_option("select[aria-label='Status']", "correct")

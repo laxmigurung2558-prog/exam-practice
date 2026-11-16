@@ -15,6 +15,7 @@ L = ["# Answer key with common mistakes",
      "- **IntegrateCo:** the 2016 − 2015 gross-wage increase is $266,055.56 (Noah's 'about $266,000'). Job codes carry undocumented suffixes (R, SH) and one corrupt code (14S1440). 68 phantom 2016 rows total $32,951.29.",
      "- **P-cards:** the database is already filtered to OSU with no blank dates, so those case instructions don't change any answer. The real traps are text dates, negative returns, > vs ≥, and SQLite's case-sensitive '=' ('Amazon.com' ≠ 'AMAZON.COM'), whereas Access ignores case.",
      "- **Journal entries:** PreparerID is not unique (101 is five different people). The key is PreparerID + BusinessUnitID, and 148 lines have no valid preparer. Names are padded with CHAR(160), which TRIM does not remove.",
+     "- **Restaurant regression:** sales, weather and game sheets merged by date; days when the restaurant was closed (sales 7 or 364 days earlier = 0) excluded, leaving 305 days. Temperature is significant alone (p = 0.011) but not once past sales are included (p = 0.18). The case's own forecast for 7 January 2019 is $2,910.33. Interpretation answers are computed from the coefficients as displayed.",
      "- **Tie:** Helena Bonham Carter's top-rated film is a tie (The King's Speech / Night Will Fall, both 8.0). Both are accepted.",
      ""]
 cur = None
@@ -27,6 +28,11 @@ for q in d["questions"]:
     L += [f"### {q['id']} — {q['prompt']}", "", f"**Answer:** {ans}{unit}"]
     if q.get("alternatives"):
         L.append(f"*Also accepted:* {', '.join(q['alternatives'])}")
+    if q.get("model"):
+        m = q["model"]
+        L += ["", f"*{m['title']}* (n = {m['n']}, R² = {m['r2']}): " + "; ".join(f"{c['label']} {c['estimate']} (p = {c['p']})" for c in m["coefficients"])]
+    if q.get("explanation"):
+        L.append(f"*Interpretation:* {q['explanation']}")
     if q.get("note"):
         L.append(f"*Note:* {q['note']}")
     sol = q["solution"]
