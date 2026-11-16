@@ -160,3 +160,28 @@ select, input[type=text], input[type=search], textarea {
   .qrow { grid-template-columns: 1fr; gap: 4px; }
   h1 { font-size: 25px; }
 }
+
+/* two parts on the home page */
+.parts { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.part h2 { margin-top: 0; }
+.part .hero-actions { margin-bottom: 0; }
+
+/* Exams | Questions sub-tabs */
+.tabs .btn { border: none; border-bottom: 3px solid transparent; border-radius: 0; background: none; color: var(--muted); padding: 8px 12px; }
+.tabs .btn.current-tab { border-bottom-color: var(--accent); color: var(--ink); font-weight: 600; }
+
+/* regression output */
+.model { margin: 14px 0 6px; }
+.model figcaption { margin-bottom: 6px; }
+.model .result { max-height: none; }
+.model td.num { font-family: var(--mono); text-align: right; }
+.model th:not(:first-child) { text-align: right; }
+
+/* narrow screens: let long file names wrap and let grid columns shrink (tables scroll inside their box) */
+.downloads a { white-space: normal; overflow-wrap: anywhere; max-width: 100%; text-align: left; }
+.exam-body > *, .exam-head > *, .qpanel { min-width: 0; }
+.qpanel h2, .exam-head h1 { overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .model th, .model td { padding: 6px 6px; font-size: 12px; }
+  .model td:first-child { white-space: normal; min-width: 110px; }
+}

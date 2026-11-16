@@ -20,6 +20,20 @@
     progress[id] = p; save();
   }
   function statusOf(id) { return (progress[id] && progress[id].status) || "none"; }
+  var KIND = {
+    manipulation: { title: "Data Manipulation", subjects: ["Excel", "SQL"],
+      examIntro: "Each exam has 3 Excel and 2 SQL questions on two data files, with an 8-minute timer like the real exam. Download and open the files before you start the timer.",
+      bankIntro: "Every Excel and SQL question from the exams, organised by dataset. Practise them one at a time." },
+    interpretation: { title: "Data Interpretation", subjects: ["Interpretation"],
+      examIntro: "Each exam has 4 regression questions on the restaurant case (Excel Part 4): read the model output, make a prediction and interpret the results. The models were estimated on the real case data.",
+      bankIntro: "Regression questions on the restaurant case: predictions, coefficients, units, dummies, interactions and significance." }
+  };
+  function kindOf(q) { return q.subject === "Interpretation" ? "interpretation" : "manipulation"; }
+  function subTabs(kind, active) {
+    return h("div", { class: "tabs", style: "margin:0 0 20px" }, [
+      h("a", { class: "btn" + (active === "exams" ? " current-tab" : ""), href: "#/" + kind + "/exams", "aria-current": active === "exams" ? "page" : null, text: KIND[kind].title + " exams" }),
+      h("a", { class: "btn" + (active === "questions" ? " current-tab" : ""), href: "#/" + kind + "/questions", "aria-current": active === "questions" ? "page" : null, text: KIND[kind].title + " questions" })]);
+  }
   var STATUS_LABEL = { correct: "Correct", trap: "Known mistake", wrong: "Not yet", none: "Not tried" };
 
   // ---------------- helpers ----------------
@@ -142,11 +156,11 @@
 
     // answer box
     var input = h("input", { type: "text", id: "ans-" + q.id, autocomplete: "off", spellcheck: "false",
-      placeholder: q.answer.kind === "number" ? "e.g. 1,234.56 or 1.234,56" : "Type your answer", "aria-label": "Your answer" });
+      placeholder: q.answer.kind === "number" ? "e.g. 1,234.56 or 1.234,56" : (/^(yes|no)$/.test(q.answer.value) ? "yes or no" : "Type your answer"), "aria-label": "Your answer" });
     function doCheck() { showFeedback(Checker.checkAnswer(q, input.value)); }
     input.addEventListener("keydown", function (e) { if (e.key === "Enter") doCheck(); });
     var answerTab = h("div", null, [
-      h("label", { for: "ans-" + q.id, class: "note", text: "Enter the result you got in " + (q.subject === "SQL" ? "your database tool" : "Excel") + ":" }),
+      h("label", { for: "ans-" + q.id, class: "note", text: q.subject === "Interpretation" ? "Your answer, worked out from the model output:" : "Enter the result you got in " + (q.subject === "SQL" ? "your database tool" : "Excel") + ":" }),
       h("div", { class: "answer-row" }, [input, q.answer.unit ? h("span", { class: "unit", text: q.answer.unit }) : null,
         h("button", { class: "primary", type: "button", onclick: doCheck, text: "Check my answer" })])
     ]);
@@ -201,14 +215,27 @@
     if (q.alternatives && q.alternatives.length) solBox.appendChild(h("p", { class: "note", text: "Also accepted: " + q.alternatives.join("; ") }));
     if (q.solution.sql) solBox.appendChild(h("pre", null, [h("code", { text: q.solution.sql })]));
     if (q.solution.excel) solBox.appendChild(h("p", null, [h("strong", { text: "How: " }), q.solution.excel]));
+    if (q.explanation) solBox.appendChild(h("p", null, [h("strong", { text: "Interpretation: " }), q.explanation]));
     if (q.note) solBox.appendChild(h("p", { class: "note", text: "Note: " + q.note }));
     if (q.traps.length) {
       solBox.appendChild(h("p", { class: "note", text: "Common mistakes on this question:" }));
       solBox.appendChild(h("ul", { class: "note" }, q.traps.map(function (t) { return h("li", { text: t.message }); })));
     }
 
+    var modelBox = null;
+    if (q.model) {
+      var m = q.model;
+      modelBox = h("figure", { class: "model" }, [
+        h("figcaption", null, [h("strong", { text: m.title }), h("span", { class: "note", text: " · Outcome: " + m.outcome + " · n = " + m.n + " · R² = " + m.r2 })]),
+        h("div", { class: "result" }, [h("table", null, [
+          h("thead", null, [h("tr", null, ["Term", "Estimate", "Std. error", "p-value"].map(function (c) { return h("th", { scope: "col", text: c }); }))]),
+          h("tbody", null, m.coefficients.map(function (c) {
+            return h("tr", null, [h("td", { text: c.label }), h("td", { class: "num", text: String(c.estimate) }), h("td", { class: "num", text: String(c.se) }), h("td", { class: "num", text: c.p < 0.001 ? "< 0.001" : c.p.toFixed(3) })]);
+          }))])])]);
+    }
     return h("section", { class: "card qpanel", "aria-labelledby": "qt-" + q.id }, [
       h("div", { class: "qmeta" }, [subjectPill(q.subject), h("span", { text: q.id + " · " + q.case })]),
+      modelBox,
       h("h2", { id: "qt-" + q.id, text: q.prompt }),
       tabs, answerTab, sqlTab, fb,
       h("div", { class: "sql-actions" }, [revealBtn, peek]), solBox
@@ -220,48 +247,60 @@
     setNav("");
     var nTraps = D.questions.reduce(function (s, q) { return s + q.traps.length; }, 0);
     var done = D.questions.filter(function (q) { return statusOf(q.id) === "correct"; }).length;
+    function count(kind, what) {
+      return what === "q" ? D.questions.filter(function (q) { return kindOf(q) === kind; }).length : EXAMS.filter(function (x) { return x.kind === kind; }).length;
+    }
+    function part(kind, text) {
+      return h("section", { class: "card part" }, [
+        h("h2", { text: KIND[kind].title }), h("p", { text: text }),
+        h("div", { class: "hero-actions" }, [
+          h("a", { class: "btn primary", href: "#/" + kind + "/exams", text: KIND[kind].title + " Exams (" + count(kind, "x") + ")" }),
+          h("a", { class: "btn", href: "#/" + kind + "/questions", text: KIND[kind].title + " Questions (" + count(kind, "q") + ")" })])]);
+    }
     render([
-      h("h1", { text: "Practise the exam — and find out if you're actually right" }),
-      h("p", { class: "lead", text: "Exams in the real format (3 Excel + 2 SQL questions, 8 minutes) built from the course cases. Type the result you get and the site tells you instantly whether it's correct — and if it isn't, which common mistake you probably made." }),
-      h("div", { class: "hero-actions" }, [
-        h("a", { class: "btn primary", href: "#/exam/" + EXAMS[Math.floor(Math.random() * EXAMS.length)].id, text: "Start a random exam" }),
-        h("a", { class: "btn", href: "#/questions", text: "Browse the question bank" })]),
-      h("div", { class: "grid" }, [
+      h("h1", { text: "Oral exam practice — and find out if you're actually right" }),
+      h("p", { class: "lead", text: "The oral exam has a full data manipulation exam and a full data interpretation exam. Practise both here. Type the result you get and the site tells you instantly whether it's correct — and if it isn't, which common mistake you probably made." }),
+      h("div", { class: "parts" }, [
+        part("manipulation", "Excel and SQL tasks on the course cases: film permits, ETL, IntegrateCo payroll, Chinook, CS50 and OSU purchasing cards. Practise complete exams (3 Excel + 2 SQL, 8 minutes) or single questions."),
+        part("interpretation", "Regression on the restaurant case: read the model output, make predictions, and interpret coefficients, dummies, interactions and p-values.")]),
+      h("div", { class: "grid", style: "margin-top:22px" }, [
         h("div", { class: "card" }, [h("div", { class: "stat", text: String(D.questions.length) }), h("div", { text: "questions with verified answers" })]),
         h("div", { class: "card" }, [h("div", { class: "stat", text: String(nTraps) }), h("div", { text: "common mistakes the checker recognises" })]),
-        h("div", { class: "card" }, [h("div", { class: "stat", text: String(EXAMS.length) }), h("div", { text: "practice exams" })]),
         h("div", { class: "card" }, [h("div", { class: "stat", text: done + " / " + D.questions.length }), h("div", { text: "answered correctly in this browser" })])
       ]),
       h("h2", { text: "What makes this different" }),
       h("div", { class: "card feature" }, [
-        h("p", null, ["Practising alone, you can't tell whether your number is right. Here every answer is checked against the result computed from the actual data files. Wrong answers are compared with ", h("strong", { text: "the wrong numbers that typical mistakes produce" }), " — dates imported with Danish settings, returns stored as negative numbers, a lookup on a key that isn't unique, > instead of >= — so you learn ", h("em", { text: "why" }), " you were wrong."]),
+        h("p", null, ["Practising alone, you can't tell whether your number is right. Here every answer is checked against the result computed from the actual data files. Wrong answers are compared with ", h("strong", { text: "the wrong numbers that typical mistakes produce" }), " — dates imported with Danish settings, returns stored as negative numbers, a lookup on a key that isn't unique, Celsius plugged into a Fahrenheit model — so you learn ", h("em", { text: "why" }), " you were wrong."]),
         h("a", { href: "#/how", text: "How checking works →" })
       ])
     ], "Home");
   }
 
-  function viewExams() {
-    setNav("exams");
+  function viewExams(kind) {
+    setNav(kind);
+    var list = EXAMS.filter(function (x) { return x.kind === kind; });
     render([
-      h("h1", { text: "Practice exams" }),
-      h("p", { class: "lead", text: "Each exam has 3 Excel and 2 SQL questions on two data files, with an 8-minute timer like the real exam. Download and open the files before you start the timer." }),
-      h("div", { class: "hero-actions" }, [h("a", { class: "btn primary", href: "#/exam/" + EXAMS[Math.floor(Math.random() * EXAMS.length)].id, text: "Choose one for me" })]),
-      h("div", { class: "grid" }, EXAMS.map(function (x) {
+      h("h1", { text: KIND[kind].title }),
+      subTabs(kind, "exams"),
+      h("p", { class: "lead", text: KIND[kind].examIntro }),
+      h("div", { class: "hero-actions" }, [h("a", { class: "btn primary", href: "#/exam/" + list[Math.floor(Math.random() * list.length)].id, text: "Choose one for me" })]),
+      h("div", { class: "grid" }, list.map(function (x) {
         var done = x.questions.filter(function (id) { return statusOf(id) === "correct"; }).length;
         return h("a", { class: "card exam-card btn", href: "#/exam/" + x.id }, [
           h("span", { class: "id", text: x.id }),
-          h("strong", { text: DS[x.datasets[0]].title + " + " + DS[x.datasets[1]].title }),
-          h("span", { class: "meta", text: "5 questions · " + x.minutes + " min · " + done + "/5 correct" })]);
+          h("strong", { text: x.datasets.map(function (k) { return DS[k].title; }).join(" + ") }),
+          h("span", { class: "meta", text: x.questions.length + " questions · " + x.minutes + " min · " + done + "/" + x.questions.length + " correct" })]);
       }))
-    ], "Exams");
+    ], KIND[kind].title + " exams");
   }
 
   var timer = { id: null, left: 0, running: false, examId: null };
   function viewExam(id, idx) {
-    setNav("exams");
     var x = EXAMS.filter(function (e) { return e.id === id; })[0];
     if (!x) return viewNotFound();
-    idx = Math.max(0, Math.min(4, idx || 0));
+    setNav(x.kind);
+    var lastIdx = x.questions.length - 1;
+    idx = Math.max(0, Math.min(lastIdx, idx || 0));
     if (timer.examId !== id) { clearInterval(timer.id); timer = { id: null, left: x.minutes * 60, running: false, examId: id }; }
     var clock = h("span", { class: "clock", "aria-live": "off" });
     var timeMsg = h("span", { class: "note", role: "status", "aria-live": "polite" });
@@ -292,7 +331,7 @@
       var q = QUEST[qid];
       side.appendChild(h("button", { type: "button", class: i === idx ? "current" : "", "aria-current": i === idx ? "step" : null,
         onclick: function () { location.hash = "#/exam/" + id + "/" + (i + 1); } },
-        [h("span", { text: (i + 1) + ". " + q.subject + " · " + q.id }), h("span", { class: "dot " + statusOf(qid), title: STATUS_LABEL[statusOf(qid)] })]));
+        [h("span", { text: (i + 1) + ". " + (q.subject === "Interpretation" ? "" : q.subject + " · ") + q.id }), h("span", { class: "dot " + statusOf(qid), title: STATUS_LABEL[statusOf(qid)] })]));
     });
     side.appendChild(h("a", { class: "btn", href: "#/report/" + id, text: "Finish → report" }));
 
@@ -303,12 +342,12 @@
     });
     var nav = h("div", { class: "qnav" }, [
       idx > 0 ? h("a", { class: "btn", href: "#/exam/" + id + "/" + idx, text: "← Previous" }) : h("span"),
-      idx < 4 ? h("a", { class: "btn", href: "#/exam/" + id + "/" + (idx + 2), text: "Next →" }) : h("a", { class: "btn primary", href: "#/report/" + id, text: "Finish → report" })
+      idx < lastIdx ? h("a", { class: "btn", href: "#/exam/" + id + "/" + (idx + 2), text: "Next →" }) : h("a", { class: "btn primary", href: "#/report/" + id, text: "Finish → report" })
     ]);
     render([
-      h("p", null, [h("a", { href: "#/exams", text: "← All exams" })]),
+      h("p", null, [h("a", { href: "#/" + x.kind + "/exams", text: "← All " + KIND[x.kind].title.toLowerCase() + " exams" })]),
       h("div", { class: "exam-head" }, [
-        h("div", null, [h("h1", { text: "Exam " + x.id }), downloads(x.datasets[0]), h("div", { style: "height:8px" }), downloads(x.datasets[1])]),
+        h("div", null, [h("h1", { text: KIND[x.kind].title + " exam " + x.id })].concat(x.datasets.map(function (k, i) { return h("div", { style: i ? "margin-top:8px" : null }, [downloads(k)]); }))),
         h("div", { class: "card timer" }, [h("div", null, [h("div", { class: "note", text: "Time remaining" }), clock]), startBtn, resetBtn, timeMsg])
       ]),
       h("div", { class: "exam-body" }, [side, h("div", null, [panel, nav])])
@@ -316,9 +355,9 @@
   }
 
   function viewReport(id) {
-    setNav("exams");
     var x = EXAMS.filter(function (e) { return e.id === id; })[0];
     if (!x) return viewNotFound();
+    setNav(x.kind);
     clearInterval(timer.id); timer.running = false;
     var qs = x.questions.map(function (qid) { return QUEST[qid]; });
     var correct = qs.filter(function (q) { return statusOf(q.id) === "correct"; }).length;
@@ -328,7 +367,7 @@
       h("p", null, [h("a", { href: "#/exam/" + id, text: "← Back to exam " + id })]),
       h("h1", { text: "Exam " + id + " — report" }),
       h("div", { class: "kpi" }, [
-        h("div", { class: "card" }, [h("div", { class: "stat", text: correct + " / 5" }), h("div", { text: "correct" })]),
+        h("div", { class: "card" }, [h("div", { class: "stat", text: correct + " / " + qs.length }), h("div", { text: "correct" })]),
         h("div", { class: "card" }, [h("div", { class: "stat", text: String(traps.length) }), h("div", { text: "known mistakes made" })]),
         h("div", { class: "card" }, [h("div", { class: "stat", text: timer.examId === id ? (Math.floor((x.minutes * 60 - timer.left) / 60) + " min") : "—" }), h("div", { text: "time used" })])
       ]),
@@ -341,15 +380,16 @@
     ], "Report " + id);
   }
 
-  function viewQuestions() {
-    setNav("questions");
-    var st = viewQuestions.state || (viewQuestions.state = { subject: "", dataset: "", status: "", text: "" });
+  var bankState = {};
+  function viewQuestions(kind) {
+    setNav(kind);
+    var st = bankState[kind] || (bankState[kind] = { subject: "", dataset: "", status: "", text: "" });
     var list = h("div", { class: "qlist" });
     var count = h("p", { class: "note", role: "status", "aria-live": "polite" });
     function draw() {
       var t = st.text.toLowerCase();
       var qs = D.questions.filter(function (q) {
-        return (!st.subject || q.subject === st.subject) && (!st.dataset || q.dataset === st.dataset) &&
+        return kindOf(q) === kind && (!st.subject || q.subject === st.subject) && (!st.dataset || q.dataset === st.dataset) &&
           (!st.status || statusOf(q.id) === st.status) && (!t || (q.id + " " + q.prompt + " " + q.topics.join(" ")).toLowerCase().indexOf(t) >= 0);
       });
       count.textContent = qs.length + " question(s)";
@@ -369,27 +409,29 @@
     }
     var search = h("input", { type: "search", placeholder: "e.g. returns, join, dates", value: st.text, "aria-label": "Search questions" });
     search.oninput = function () { st.text = search.value; draw(); };
+    var dsKeys = Object.keys(DS).filter(function (k) { return KIND[kind].subjects.indexOf(DS[k].subject) >= 0; });
     render([
-      h("h1", { text: "Question bank" }),
-      h("p", { class: "lead", text: "Every question from the exams, organised by dataset. Practise them one at a time." }),
+      h("h1", { text: KIND[kind].title }),
+      subTabs(kind, "questions"),
+      h("p", { class: "lead", text: KIND[kind].bankIntro }),
       h("div", { class: "filters" }, [
-        selectBox("Subject", "subject", [["Excel", "Excel"], ["SQL", "SQL"]]),
-        selectBox("Dataset", "dataset", Object.keys(DS).map(function (k) { return [k, DS[k].title]; })),
+        kind === "manipulation" ? selectBox("Subject", "subject", [["Excel", "Excel"], ["SQL", "SQL"]]) : null,
+        dsKeys.length > 1 ? selectBox("Dataset", "dataset", dsKeys.map(function (k) { return [k, DS[k].title]; })) : null,
         selectBox("Status", "status", [["none", "Not tried"], ["wrong", "Not yet"], ["trap", "Known mistake"], ["correct", "Correct"]]),
         h("label", null, ["Search", search])]),
       count, list
-    ], "Question bank");
+    ], KIND[kind].title + " questions");
     draw();
   }
 
   function viewQuestion(id) {
-    setNav("questions");
     var q = QUEST[id];
     if (!q) return viewNotFound();
+    setNav(kindOf(q));
     var same = D.questions.filter(function (x) { return x.dataset === q.dataset; });
     var i = same.indexOf(q);
     render([
-      h("p", null, [h("a", { href: "#/questions", text: "← Question bank" })]),
+      h("p", null, [h("a", { href: "#/" + kindOf(q) + "/questions", text: "← " + KIND[kindOf(q)].title + " questions" })]),
       h("div", { class: "card", style: "margin-bottom:16px" }, [downloads(q.dataset)]),
       questionPanel(q),
       h("div", { class: "qnav" }, [
@@ -416,6 +458,8 @@
         h("p", null, ["Correct answer: ", h("strong", { text: answerText(ex) })]),
         h("ul", null, ex.traps.map(function (t) { return h("li", null, [h("strong", { text: fmt(t.value) + " → " }), t.message]); }))
       ]) : null,
+      h("h2", { text: "Data interpretation" }),
+      h("p", { text: "The regression models were estimated on the restaurant case data (sales, weather and game sheets merged by date; days when the restaurant was closed excluded). Answers are computed from the coefficients exactly as displayed, so working from the table gives the stored answer. Mistakes recognised include leaving out the intercept, reading a dummy as a level instead of a difference, ignoring an interaction term, and plugging Celsius into a Fahrenheit model." }),
       h("h2", { text: "SQL in the browser" }),
       h("p", { text: "For the smaller databases (Chinook, songs, Fiftyville) you can also paste your query and run it here. Your result is compared with the expected result — same rows, and the same order when the question asks for one. The P-card (94 MB) and movies (69 MB) databases are too large for a browser: run those in DB Browser for SQLite and enter your result." }),
       h("h2", { text: "Mistakes recognised, by dataset" }),
@@ -430,10 +474,13 @@
     var parts = (location.hash || "#/").replace(/^#\/?/, "").split("/");
     switch (parts[0]) {
       case "": return viewHome();
-      case "exams": return viewExams();
+      case "manipulation":
+      case "interpretation":
+        return parts[1] === "questions" ? viewQuestions(parts[0]) : viewExams(parts[0]);
+      case "exams": return viewExams("manipulation");
       case "exam": return viewExam(parts[1], parseInt(parts[2] || "1", 10) - 1);
       case "report": return viewReport(parts[1]);
-      case "questions": return viewQuestions();
+      case "questions": return viewQuestions("manipulation");
       case "q": return viewQuestion(parts[1]);
       case "how": return viewHow();
       default: return viewNotFound();

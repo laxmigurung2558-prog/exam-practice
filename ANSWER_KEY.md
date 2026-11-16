@@ -1,6 +1,6 @@
 # Answer key with common mistakes
 
-115 questions · 144 diagnosed mistakes · every answer computed from the course data.
+131 questions · 179 diagnosed mistakes · every answer computed from the course data.
 
 Each wrong answer listed under a question is the exact number that the described mistake produces, so the website can tell students which trap they fell into.
 
@@ -12,6 +12,7 @@ Each wrong answer listed under a question is the exact number that the described
 - **IntegrateCo:** the 2016 − 2015 gross-wage increase is $266,055.56 (Noah's 'about $266,000'). Job codes carry undocumented suffixes (R, SH) and one corrupt code (14S1440). 68 phantom 2016 rows total $32,951.29.
 - **P-cards:** the database is already filtered to OSU with no blank dates, so those case instructions don't change any answer. The real traps are text dates, negative returns, > vs ≥, and SQLite's case-sensitive '=' ('Amazon.com' ≠ 'AMAZON.COM'), whereas Access ignores case.
 - **Journal entries:** PreparerID is not unique (101 is five different people). The key is PreparerID + BusinessUnitID, and 148 lines have no valid preparer. Names are padded with CHAR(160), which TRIM does not remove.
+- **Restaurant regression:** sales, weather and game sheets merged by date; days when the restaurant was closed (sales 7 or 364 days earlier = 0) excluded, leaving 305 days. Temperature is significant alone (p = 0.011) but not once past sales are included (p = 0.18). The case's own forecast for 7 January 2019 is $2,910.33. Interpretation answers are computed from the coefficients as displayed.
 - **Tie:** Helena Bonham Carter's top-rated film is a tie (The King's Speech / Night Will Fall, both 8.0). Both are accepted.
 
 ## Excel Part 1 · NYC film permits (PwC)
@@ -768,19 +769,19 @@ SELECT g.Name FROM InvoiceLine il JOIN Track t ON t.TrackId = il.TrackId JOIN Ge
 GROUP BY g.Name ORDER BY SUM(il.Quantity) DESC LIMIT 1;
 ```
 
-### CH21 — Show customer names (first and last), invoice IDs and totals for invoices billed to the United Kingdom. How many rows?
+### CH21 — List every invoice billed to Germany with the customer's full name, the invoice date and the invoice total. How many invoices are there?
 
-**Answer:** 21 rows
+**Answer:** 28 rows
 
 ```sql
-SELECT c.FirstName, c.LastName, i.InvoiceId, i.Total FROM Invoice i JOIN Customer c ON c.CustomerId = i.CustomerId
-WHERE i.BillingCountry = 'United Kingdom';
+SELECT c.FirstName || ' ' || c.LastName AS Customer, i.InvoiceDate, i.Total FROM Invoice i JOIN Customer c ON c.CustomerId = i.CustomerId
+WHERE i.BillingCountry = 'Germany' ORDER BY i.InvoiceDate;
 ```
 
 | If the student gets… | Diagnosis |
 |---|---|
-| 0 | The data spells it 'United Kingdom'. Check the values first with SELECT DISTINCT BillingCountry. |
-| 1,239 | You listed both tables without a join condition (a cross join), so every invoice was paired with every customer. Join ON CustomerId. |
+| 1,652 | You listed both tables without a join condition (a cross join), so every invoice was paired with every customer. Join ON CustomerId. |
+| 0 | The data spells it 'Germany'. Check the values first with SELECT DISTINCT BillingCountry. |
 
 ## SQL Part 1 · CS50 songs
 
@@ -1324,3 +1325,234 @@ SELECT MAX(julianday(printf('%04d-%02d-%02d', cast(substr(substr(PostedDate, ins
 |---|---|
 | 1 | You subtracted the text dates directly. '11/28/2014' - '12/2/2014' only compares the leading month numbers. Convert the text to a date first (e.g. julianday on an ISO date). |
 | 0 | You subtracted in the wrong order. The case says TimeDif is positive when PostedDate is after TransactionDate: PostedDate - TransactionDate. |
+
+## Excel Part 4 · Restaurant regression (Larry's Commissary)
+
+### RI01 — Bob wants a forecast for Monday 07 January 2019, 7 days after the last day in the data. Sales on 31 December 2018 were $3,252, sales 364 days before the target day were $2,841, and there is no game. What are the predicted sales?
+
+**Answer:** 2,910.33 USD
+
+*Model 3: prediction model* (n = 305, R² = 0.547): Intercept 716.16 (p = 0.0); Sales 7 days earlier ($) 0.258 (p = 0.0); Sales 364 days earlier ($) 0.477 (p = 0.0); Game day (1 = yes) 376.36 (p = 0.06)
+*Interpretation:* Each coefficient is multiplied by its value and added to the intercept. The game-day dummy is either 0 or 1, so its coefficient is either added in full or not at all.
+
+*How:* Prediction = 716.16 + 0.258×(sales 7 days earlier) + 0.477×(sales 364 days earlier) + 376.36×(game day). Here: 716.16 + 0.258×3,252 + 0.477×2,841 + 376.36×0 = 2,910.33.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 2,194.17 | You left out the intercept. A prediction always starts from the intercept, then adds each coefficient × its value. |
+| 3,000.34 | You swapped the two sales values: the 0.258 coefficient belongs to sales 7 days earlier, the other to sales 364 days earlier. |
+| 3,286.69 | It's not a game day: the dummy is 0, so the game-day coefficient adds nothing. |
+
+### RI02 — Predict sales for a Saturday with a home game, when sales 7 days earlier were $4,500 and sales 364 days earlier were $4,800.
+
+**Answer:** 4,543.12 USD
+
+*Model 3: prediction model* (n = 305, R² = 0.547): Intercept 716.16 (p = 0.0); Sales 7 days earlier ($) 0.258 (p = 0.0); Sales 364 days earlier ($) 0.477 (p = 0.0); Game day (1 = yes) 376.36 (p = 0.06)
+*Interpretation:* Each coefficient is multiplied by its value and added to the intercept. The game-day dummy is either 0 or 1, so its coefficient is either added in full or not at all.
+
+*How:* Prediction = 716.16 + 0.258×(sales 7 days earlier) + 0.477×(sales 364 days earlier) + 376.36×(game day). Here: 716.16 + 0.258×4,500 + 0.477×4,800 + 376.36×1 = 4,543.12.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 3,826.96 | You left out the intercept. A prediction always starts from the intercept, then adds each coefficient × its value. |
+| 4,477.42 | You swapped the two sales values: the 0.258 coefficient belongs to sales 7 days earlier, the other to sales 364 days earlier. |
+| 4,166.76 | It's a game day, so add the game-day coefficient (× 1). |
+
+### RI03 — Predict sales for a Tuesday without a game, when sales 7 days earlier were $2,300 and sales 364 days earlier were $2,100.
+
+**Answer:** 2,311.26 USD
+
+*Model 3: prediction model* (n = 305, R² = 0.547): Intercept 716.16 (p = 0.0); Sales 7 days earlier ($) 0.258 (p = 0.0); Sales 364 days earlier ($) 0.477 (p = 0.0); Game day (1 = yes) 376.36 (p = 0.06)
+*Interpretation:* Each coefficient is multiplied by its value and added to the intercept. The game-day dummy is either 0 or 1, so its coefficient is either added in full or not at all.
+
+*How:* Prediction = 716.16 + 0.258×(sales 7 days earlier) + 0.477×(sales 364 days earlier) + 376.36×(game day). Here: 716.16 + 0.258×2,300 + 0.477×2,100 + 376.36×0 = 2,311.26.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 1,595.10 | You left out the intercept. A prediction always starts from the intercept, then adds each coefficient × its value. |
+| 2,355.06 | You swapped the two sales values: the 0.258 coefficient belongs to sales 7 days earlier, the other to sales 364 days earlier. |
+| 2,687.62 | It's not a game day: the dummy is 0, so the game-day coefficient adds nothing. |
+
+### RI04 — Predict sales for a game day when sales 7 days earlier were $3,900 and sales 364 days earlier were $5,200.
+
+**Answer:** 4,579.12 USD
+
+*Model 3: prediction model* (n = 305, R² = 0.547): Intercept 716.16 (p = 0.0); Sales 7 days earlier ($) 0.258 (p = 0.0); Sales 364 days earlier ($) 0.477 (p = 0.0); Game day (1 = yes) 376.36 (p = 0.06)
+*Interpretation:* Each coefficient is multiplied by its value and added to the intercept. The game-day dummy is either 0 or 1, so its coefficient is either added in full or not at all.
+
+*How:* Prediction = 716.16 + 0.258×(sales 7 days earlier) + 0.477×(sales 364 days earlier) + 376.36×(game day). Here: 716.16 + 0.258×3,900 + 0.477×5,200 + 376.36×1 = 4,579.12.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 3,862.96 | You left out the intercept. A prediction always starts from the intercept, then adds each coefficient × its value. |
+| 4,294.42 | You swapped the two sales values: the 0.258 coefficient belongs to sales 7 days earlier, the other to sales 364 days earlier. |
+| 4,202.76 | It's a game day, so add the game-day coefficient (× 1). |
+
+### RI05 — According to Model 1, by how much do predicted daily sales change when the maximum temperature rises by 10 °F?
+
+**Answer:** 69.20 USD
+
+*Model 1: sales and temperature* (n = 305, R² = 0.021): Intercept 2814.86 (p = 0.0); Max temperature (°F) 6.92 (p = 0.011)
+*Interpretation:* The coefficient is the change in predicted sales for a 1-unit (1 °F) increase, holding nothing else constant in this simple model.
+
+*How:* Slope × change = 6.92 × 10 = 69.20.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 6.92 | That's the effect of 1 °F. The question asks for a 10 °F increase: multiply by 10. |
+| 2,884.06 | You added the intercept. A change in sales only involves the slope; the intercept matters for a level (prediction), not a difference. |
+
+### RI06 — The temperature in the data is in Fahrenheit. By how much do predicted daily sales change when the maximum temperature rises by 10 °C?
+
+**Answer:** 124.56 USD
+
+*Model 1: sales and temperature* (n = 305, R² = 0.021): Intercept 2814.86 (p = 0.0); Max temperature (°F) 6.92 (p = 0.011)
+*Interpretation:* Always check the units of a variable before using a coefficient. A 10-degree change in Celsius is an 18-degree change in Fahrenheit.
+
+*How:* A change of 10 °C = 18 °F (1 °C = 1.8 °F), so 6.92 × 18 = 124.56.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 69.20 | The model's temperature is in °F. A rise of 10 °C equals 18 °F, so multiply the coefficient by 18, not 10. |
+| 346 | For a CHANGE in temperature, only the 1.8 factor applies. The +32 is for converting a temperature level, not a difference. |
+
+### RI07 — Using Model 1, predict daily sales on a day with a maximum temperature of 25 °C.
+
+**Answer:** 3,347.70 USD
+
+*Model 1: sales and temperature* (n = 305, R² = 0.021): Intercept 2814.86 (p = 0.0); Max temperature (°F) 6.92 (p = 0.011)
+*Interpretation:* To predict, convert the input to the model's units first (°F), then intercept + slope × value.
+
+*How:* 25 °C = 25 × 1.8 + 32 = 77 °F. Prediction = 2814.86 + 6.92 × 77 = 3,347.70.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 2,987.86 | The model uses °F. 25 °C is 77 °F (×1.8 + 32); you plugged in 25 directly. |
+| 3,126.26 | For a temperature LEVEL, convert with °F = °C × 1.8 + 32. You forgot the +32. |
+| 532.84 | You forgot the intercept. |
+
+### RI08 — At the 5% significance level, is maximum temperature a significant predictor of sales in Model 1? (yes / no)
+
+**Answer:** yes
+*Also accepted:* significant
+
+*Model 1: sales and temperature* (n = 305, R² = 0.021): Intercept 2814.86 (p = 0.0); Max temperature (°F) 6.92 (p = 0.011)
+*Interpretation:* A coefficient is significant at 5% when its p-value is below 0.05. Significance says the effect is unlikely to be zero; it does not say the effect is large. Model 1 explains only 2.1% of the variation in sales.
+
+*How:* The p-value for temperature is 0.011, which is below 0.05, so the answer is 'yes'.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| no | Compare the p-value (0.011) with 0.05: below 0.05 means significant. Don't compare the coefficient or R² with 0.05. |
+| not significant | Compare the p-value (0.011) with 0.05: below 0.05 means significant. |
+
+### RI09 — In Model 5, which also includes past sales and game days, is maximum temperature significant at the 5% level? (yes / no)
+
+**Answer:** no
+*Also accepted:* not significant
+
+*Model 5: prediction model + temperature* (n = 305, R² = 0.55): Intercept 569.36 (p = 0.002); Sales 7 days earlier ($) 0.249 (p = 0.0); Sales 364 days earlier ($) 0.476 (p = 0.0); Game day (1 = yes) 381.85 (p = 0.056); Max temperature (°F) 2.52 (p = 0.18)
+*Interpretation:* Temperature was significant on its own (Model 1, p = 0.011) but not once past sales are included (p = 0.18). Past sales already capture the seasonal pattern that temperature was picking up, so temperature adds little extra information. This is why a simple regression can overstate an effect (omitted variables).
+
+*How:* The p-value for temperature is now 0.18, above 0.05, so the answer is 'no'.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| yes | Look at Model 5's p-value (0.18), not Model 1's. Once past sales are in the model, temperature is no longer significant at 5%. |
+| significant | Look at Model 5's p-value (0.18), not Model 1's. |
+
+### RI10 — According to Model 2, how much higher are predicted sales on a game day than on other days?
+
+**Answer:** 1,389.30 USD
+
+*Model 2: sales and game days* (n = 305, R² = 0.08): Intercept 3238.09 (p = 0.0); Game day (1 = yes) 1389.3 (p = 0.0)
+*Interpretation:* A dummy coefficient compares the '1' group (game days) with the '0' group (other days). The intercept is the average for the '0' group.
+
+*How:* For a 0/1 dummy, the coefficient is the difference between the two groups: 1389.3.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 4,627.39 | That's the predicted LEVEL of sales on a game day (intercept + coefficient). The question asks how much HIGHER, which is the coefficient alone. |
+| 3,238.09 | That's the predicted sales on a non-game day (the intercept). |
+
+### RI11 — According to Model 2, what are predicted sales on a game day?
+
+**Answer:** 4,627.39 USD
+
+*Model 2: sales and game days* (n = 305, R² = 0.08): Intercept 3238.09 (p = 0.0); Game day (1 = yes) 1389.3 (p = 0.0)
+*Interpretation:* The prediction for the dummy = 1 group is the intercept plus the dummy coefficient.
+
+*How:* Intercept + game-day coefficient × 1 = 3238.09 + 1389.3 = 4,627.39.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 1,389.30 | That's the DIFFERENCE between game days and other days. For the predicted level, add the intercept. |
+
+### RI12 — In Model 3, how much higher are predicted sales on a game day than on another day with the same past sales?
+
+**Answer:** 376.36 USD
+
+*Model 3: prediction model* (n = 305, R² = 0.547): Intercept 716.16 (p = 0.0); Sales 7 days earlier ($) 0.258 (p = 0.0); Sales 364 days earlier ($) 0.477 (p = 0.0); Game day (1 = yes) 376.36 (p = 0.06)
+*Interpretation:* Notice the game-day effect is much smaller here (376.36) than in Model 2 (1389.3), and its p-value is 0.06. Games fall on Saturdays, which are busy anyway; once sales on the same weekday last year and last week are included, part of the 'game effect' turns out to be a weekday effect.
+
+*How:* Holding the other variables constant, the dummy coefficient is the difference: 376.36.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 1,389.30 | That's Model 2's coefficient. Model 3 controls for past sales, so read the game-day coefficient from Model 3. |
+| 1,092.52 | You added the intercept. 'How much higher' is the coefficient alone. |
+
+### RI13 — In Model 4, on a game day, by how much do predicted sales increase for each extra $1 of sales 364 days earlier?
+
+**Answer:** 0.63 $ per $1
+
+*Model 4: last year's sales × game day* (n = 305, R² = 0.501): Intercept 1101.7 (p = 0.0); Sales 364 days earlier ($) 0.604 (p = 0.0); Game day (1 = yes) 329.75 (p = 0.681); Sales 364 days earlier × Game day 0.026 (p = 0.868)
+*Interpretation:* With an interaction, the effect of last year's sales depends on whether it's a game day: on non-game days the slope is the main coefficient; on game days you add the interaction coefficient.
+
+*How:* On a game day the slope is 0.604 + 0.026 × 1 = 0.63.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 0.604 | That's the slope on a NON-game day. On a game day, add the interaction coefficient. |
+| 0.026 | The interaction coefficient is only the EXTRA slope on game days; add it to the main sales_364 coefficient. |
+
+### RI14 — In Model 4, how much higher are predicted sales on a game day than on a non-game day, when sales 364 days earlier were $4,000?
+
+**Answer:** 433.75 USD
+
+*Model 4: last year's sales × game day* (n = 305, R² = 0.501): Intercept 1101.7 (p = 0.0); Sales 364 days earlier ($) 0.604 (p = 0.0); Game day (1 = yes) 329.75 (p = 0.681); Sales 364 days earlier × Game day 0.026 (p = 0.868)
+*Interpretation:* With an interaction, the game-day effect is not a single number: it depends on last year's sales. Note the large p-values (0.681 and 0.868): the data give little evidence that game days change the relationship, so Bob shouldn't rely on this effect.
+
+*How:* Game-day effect = 329.75 + 0.026 × 4,000 = 433.75.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 329.75 | You ignored the interaction. The game-day effect is gameDay coefficient + interaction coefficient × last year's sales. |
+| 3,951.45 | That's the predicted LEVEL of sales on a game day. The question asks for the DIFFERENCE between game and non-game days. |
+
+### RI15 — Using Model 4, predict sales on a game day when sales 364 days earlier were $4,500.
+
+**Answer:** 4,266.45 USD
+
+*Model 4: last year's sales × game day* (n = 305, R² = 0.501): Intercept 1101.7 (p = 0.0); Sales 364 days earlier ($) 0.604 (p = 0.0); Game day (1 = yes) 329.75 (p = 0.681); Sales 364 days earlier × Game day 0.026 (p = 0.868)
+*Interpretation:* The interaction variable is the product of the two variables (4,500 × 1 on a game day), multiplied by its coefficient.
+
+*How:* 1101.7 + 0.604×4,500 + 329.75×1 + 0.026×(4,500×1) = 4,266.45.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 4,149.45 | You left out the interaction term. Its value is sales 364 days earlier × game day = 4,500 × 1. |
+| 3,819.70 | It's a game day: add the game-day coefficient and the interaction term. |
+
+### RI16 — What percentage of the variation in daily sales does Model 3 explain? (R², in %)
+
+**Answer:** 54.70 %
+
+*Model 3: prediction model* (n = 305, R² = 0.547): Intercept 716.16 (p = 0.0); Sales 7 days earlier ($) 0.258 (p = 0.0); Sales 364 days earlier ($) 0.477 (p = 0.0); Game day (1 = yes) 376.36 (p = 0.06)
+*Interpretation:* About half of the day-to-day variation is explained, so predictions can easily be off by several hundred dollars. Bob should use the forecast as a guide for ordering and staffing, with a buffer.
+
+*How:* R² = 0.547, i.e. 54.7%.
+
+| If the student gets… | Diagnosis |
+|---|---|
+| 8 | That's Model 2's R². Read it from Model 3. |

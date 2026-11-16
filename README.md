@@ -2,8 +2,10 @@
 
 A practice website for the exam in *Data Analytics in Accounting* (SDU), built only from the course materials (Excel Parts 1–4, SQL Parts 1–2).
 
-- **115 questions** across the course datasets (NYC film permits, ETL cases 1–4, IntegrateCo payroll, Chinook, CS50 songs/movies/Fiftyville, OSU P-cards)
-- **60 practice exams** in the real format: 3 Excel + 2 SQL questions on two data files, 8-minute timer
+The oral exam has two parts, and so does the site:
+
+- **Data Manipulation:** 115 Excel and SQL questions across the course datasets (NYC film permits, ETL cases 1–4, IntegrateCo payroll, Chinook, CS50 songs/movies/Fiftyville, OSU P-cards) and 60 practice exams in the real format (3 Excel + 2 SQL questions on two data files, 8-minute timer)
+- **Data Interpretation:** 16 regression questions and 12 exams (4 questions each) built on the restaurant case (Excel Part 4), using models estimated on the real case data
 - Dataset downloads for every question
 
 ## The added functionality: verified answer checking with mistake diagnosis
@@ -14,7 +16,7 @@ Students type the result they got (or, for the smaller SQLite databases, run the
 - 2,583.19 instead of 2,593.74 → SQLite's `=` is case-sensitive, so `AMAZON.COM` was missed
 - 278 instead of 182 → a lookup on `PreparerID` alone, which is not a unique key
 
-144 such mistakes are recognised. Unknown wrong answers get a targeted hint (wrong sign, off by 100/1,000/24, too many rows from a join, …). Numbers can be typed the Danish or English way.
+179 such mistakes are recognised (for example, plugging Celsius into a model estimated in Fahrenheit, or reading a dummy coefficient as a level instead of a difference). Unknown wrong answers get a targeted hint (wrong sign, off by 100/1,000/24, too many rows from a join, …). Numbers can be typed the Danish or English way.
 
 ## How the answers were produced
 
