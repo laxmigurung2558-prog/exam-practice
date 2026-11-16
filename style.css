@@ -185,3 +185,4 @@ select, input[type=text], input[type=search], textarea {
   .model th, .model td { padding: 6px 6px; font-size: 12px; }
   .model td:first-child { white-space: normal; min-width: 110px; }
 }
+.exam-card .topics { font-size: 14px; color: var(--ink); }

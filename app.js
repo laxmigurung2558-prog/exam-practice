@@ -28,6 +28,11 @@
       examIntro: "Each exam has 4 regression questions on the restaurant case (Excel Part 4): read the model output, make a prediction and interpret the results. The models were estimated on the real case data.",
       bankIntro: "Regression questions on the restaurant case: predictions, coefficients, units, dummies, interactions and significance." }
   };
+  // short topic labels so interpretation exam cards can be told apart
+  var SHORT = { RI01: "Forecast for 7 Jan 2019", RI02: "Prediction (game day)", RI03: "Prediction (no game)", RI04: "Prediction (game day)",
+    RI05: "Temperature slope", RI06: "Units: °C vs °F", RI07: "Prediction in °C", RI08: "Significance (simple model)", RI09: "Significance (with controls)",
+    RI10: "Game-day difference", RI11: "Game-day level", RI12: "Game day, controlling for past sales",
+    RI13: "Interaction slope", RI14: "Interaction: game-day effect", RI15: "Interaction prediction", RI16: "R²" };
   function kindOf(q) { return q.subject === "Interpretation" ? "interpretation" : "manipulation"; }
   function subTabs(kind, active) {
     return h("div", { class: "tabs", style: "margin:0 0 20px" }, [
@@ -289,6 +294,7 @@
         return h("a", { class: "card exam-card btn", href: "#/exam/" + x.id }, [
           h("span", { class: "id", text: x.id }),
           h("strong", { text: x.datasets.map(function (k) { return DS[k].title; }).join(" + ") }),
+          kind === "interpretation" ? h("span", { class: "topics", text: x.questions.map(function (id) { return SHORT[id] || id; }).join(" · ") }) : null,
           h("span", { class: "meta", text: x.questions.length + " questions · " + x.minutes + " min · " + done + "/" + x.questions.length + " correct" })]);
       }))
     ], KIND[kind].title + " exams");
